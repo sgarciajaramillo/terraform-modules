@@ -1,0 +1,19 @@
+# Created by .ignore support plugin (hsz.mobi)
+**/.DS_Store
+*~
+**/.idea
+**/__pycache__
+**/*.pyc
+**/venv
+**/.terraform
+**/terraform.tfstate
+**/terraform.tfstate.backup
+**/site-packages
+\#*#
+*.swp
+*.pyc
+debug.log
+.repo_conf/*.retry
+**/.idea
+**/__pycache__
+
