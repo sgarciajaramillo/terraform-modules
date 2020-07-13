@@ -8,7 +8,7 @@ image                   = "projects/ubuntu-os-cloud/global/images/ubuntu-1604-xe
 vpcs                    = ["public-vpc"]
 # subnet module
 subnets                 = ["public-subnet"]
-subnet_cidrs            = ["172.20.0.0/24"]
+subnet_cidrs            = ["172.19.2.0/24"]
 # Firewall module
 fw_ingress              = ["public-fw-ingress"]
 fw_egress               = ["public-fw-egress"]

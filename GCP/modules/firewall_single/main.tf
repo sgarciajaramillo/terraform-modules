@@ -1,8 +1,8 @@
 # Firewall Rules
-
+# https://www.terraform.io/docs/providers/google/r/compute_firewall.html
 resource "google_compute_firewall" "fw_ingress" {
   count   = length(var.vpcs)
-  name    = "${var.fw_ingress[count.index]}-${var.random_string}"
+  name    = "fw-ingress-${count.index}-${var.random_string}"
   network = var.vpcs[count.index]
   allow {
     protocol = var.allow_all
@@ -13,7 +13,7 @@ resource "google_compute_firewall" "fw_ingress" {
 
 resource "google_compute_firewall" "fw_egress" {
   count   = length(var.vpcs)
-  name    = "${var.fw_egress[count.index]}-${var.random_string}"
+  name    = "fw-egress-${count.index}-${var.random_string}"
   network = var.vpcs[count.index]
   allow {
     protocol = var.allow_all

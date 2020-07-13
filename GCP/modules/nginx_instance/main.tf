@@ -1,6 +1,6 @@
 # Compute Engine Instance - Active
 resource "google_compute_instance" "nginx_instance" {
-  name           = "terraform-nginx-instance"
+  name           = "terraform-nginx-instance-${var.random_string}"
   machine_type   = var.machine
   zone           = var.zone
   can_ip_forward = "true"
@@ -16,7 +16,6 @@ resource "google_compute_instance" "nginx_instance" {
     network    = var.public_vpc_network
     subnetwork = var.public_subnet
     access_config {
-      nat_ip = var.static_ip
     }
   }
 

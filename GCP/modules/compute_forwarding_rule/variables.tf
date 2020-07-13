@@ -2,25 +2,14 @@
 # REQUIRED PARAMETERS
 # These parameters must be supplied when consuming this module.
 # ---------------------------------------------------------------------------------------------------------------------
-variable "zone" {
+variable "target_instance_id" {
   type        = string
-  description = "Zone"
+  description = "Target Instance ID"
 }
 
-variable "machine" {
+variable "static_ip" {
   type        = string
-  description = "Machine Type"
-}
-
-variable "password" {
-  type        = string
-  default     = "ftntCl0ud"
-  description = "FGT Password"
-}
-
-variable "image" {
-  type        = string
-  description = "Ubuntu Image"
+  description = "External IP"
 }
 
 # ---------------------------------------------------------------------------------------------------------------------
@@ -31,20 +20,4 @@ variable "random_string" {
   type        = string
   default     = "abc"
   description = "Random String"
-}
-
-variable "public_vpc_network" {
-  type        = string
-  default     = "public_vpc_network_1"
-  description = "Public VPC Network"
-}
-
-variable "public_subnet" {
-  default     = "public_subnet"
-  description = "Public Subnet"
-}
-
-variable "static_ip" {
-  default     = "static_ip"
-  description = "Static IP Address"
 }

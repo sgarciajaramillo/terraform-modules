@@ -20,7 +20,30 @@ variable "password" {
 
 variable "image" {
   type        = string
-  description = "Ubuntu Image"
+  description = "FortiGate Image"
+}
+
+variable "license_file" {
+  type        = string
+  description = "License File"
+}
+
+### User Data Variables ###
+variable "public_subnet_gateway" {
+  type        = string
+  description = "Port1 Gateway"
+}
+
+# Internal IP
+variable "internal_ip" {
+  default     = "internal_ip"
+  description = "Nginx Internal IP Address"
+}
+
+# External IP
+variable "static_ip" {
+  default     = "static_ip"
+  description = "Static IP Address"
 }
 
 # ---------------------------------------------------------------------------------------------------------------------
@@ -39,12 +62,19 @@ variable "public_vpc_network" {
   description = "Public VPC Network"
 }
 
+variable "private_vpc_network" {
+  default     = "private_vpc_network_1"
+  description = "Private VPC Network"
+}
+
 variable "public_subnet" {
   default     = "public_subnet"
   description = "Public Subnet"
 }
 
-variable "static_ip" {
-  default     = "static_ip"
-  description = "Static IP Address"
+variable "private_subnet" {
+  default     = "private_subnet"
+  description = "Private Subnet"
 }
+
+

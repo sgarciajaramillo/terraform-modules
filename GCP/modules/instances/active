@@ -16,7 +16,6 @@ config system interface
     edit port1
         set mode static
         set ip ${active_port1_ip}/${active_port1_mask}
-        set ip ${active_port1_ip}/${active_port1_mask}
         set allowaccess ping https ssh http fgfm
         set description "ext"
     next
