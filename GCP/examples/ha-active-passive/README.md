@@ -1,0 +1,40 @@
+# HA Active-Passive
+
+This example creates a HA Active-Passive configuration.
+
+## Instances included in this Example
+
+1. 4 VPC Networks
+    - Public/Internal
+    - Private/External
+    - Sync
+    - Management
+1. Subnets for each VPC Network
+    - Public
+    - Private
+    - Sync
+    - Management
+1. Firewalls
+    - Creates 'INGRESS' and 'EGRESS' rules allowgin all protocols.
+1. Route
+    - Creates a route which has 'Next Hop IP' defined.
+1. External/Static IP
+1. 2 Instances
+    - Active
+        - Deploys License
+        - Updates Password
+        - Configures HA
+        - Configures GCP SDN Connector
+    - Passive
+        - Deploys License
+        - Updates Password
+        - Configures HA
+
+## How do you run these examples?
+
+1. Install [Terraform](https://www.terraform.io/).
+1. Open `variables.tf`,  and fill in any required variables that don't have a default.
+1. Run `terraform get`.
+1. Run `terraform init`.
+1. Run `terraform plan`.
+1. If the plan looks good, run `terraform apply`.
