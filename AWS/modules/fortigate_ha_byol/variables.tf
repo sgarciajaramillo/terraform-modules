@@ -128,3 +128,15 @@ variable "fgt_ha_password" {
 variable "fgt_admin_password" {
   description = "Fortigate Admin Password"
 }
+variable "public_subnet_cidr" {
+  description = "Fortigate Public Subnet CIDR"
+}
+variable "private_subnet_cidr" {
+  description = "Fortigate Public Subnet CIDR"
+}
+variable "sync_subnet_cidr" {
+  description = "Fortigate Public Subnet CIDR"
+}
+variable "ha_subnet_cidr" {
+  description = "Fortigate Public Subnet CIDR"
+}

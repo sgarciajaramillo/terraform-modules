@@ -19,7 +19,7 @@ config system interface
 edit port1
 set alias public
 set mode static
-set ip ${Port1IP}
+set ip ${Port1IP} ${public_subnet_mask}
 set allowaccess ping https ssh fgfm
 set mtu-override enable
 set mtu 9001
@@ -27,7 +27,7 @@ next
 edit port2
 set alias private
 set mode static
-set ip ${Port2IP}
+set ip ${Port2IP} ${private_subnet_mask}
 set allowaccess ping
 set mtu-override enable
 set mtu 9001
@@ -35,7 +35,7 @@ next
 edit port3
 set alias hasync
 set mode static
-set ip ${Port3IP}
+set ip ${Port3IP} ${sync_subnet_mask}
 set allowaccess ping
 set mtu-override enable
 set mtu 9001
@@ -43,7 +43,7 @@ next
 edit port4
 set alias hamgmt
 set mode static
-set ip ${Port4IP}
+set ip ${Port4IP} ${hamgmt_subnet_mask}
 set allowaccess ping https ssh
 set mtu-override enable
 set mtu 9001

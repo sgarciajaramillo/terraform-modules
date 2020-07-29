@@ -59,8 +59,12 @@ data "template_file" "fgt_userdata" {
     fgt_priority         = var.fgt_priority
     fgt_ha_password      = var.fgt_ha_password
     fgt_byol_license     = file("${path.module}/${var.fgt_byol_license}")
-    fgt-remote-heartbeat  = var.sync2_ip_address
-    PublicSubnetRouterIP  = cidrhost(data.aws_subnet.public_id.cidr_block, 1)
+    fgt-remote-heartbeat = var.sync2_ip_address
+    PublicSubnetRouterIP = cidrhost(data.aws_subnet.public_id.cidr_block, 1)
+    public_subnet_mask   = cidrnetmask(var.public_subnet_cidr)
+    private_subnet_mask  = cidrnetmask(var.private_subnet_cidr)
+    sync_subnet_mask     = cidrnetmask(var.sync_subnet_cidr)
+    hamgmt_subnet_mask   = cidrnetmask(var.ha_subnet_cidr)
     PrivateSubnetRouterIP = cidrhost(data.aws_subnet.private_id.cidr_block, 1)
     fgt_admin_password    = var.fgt_admin_password
   }

@@ -405,6 +405,10 @@ module "fortigate_1" {
   fgt_admin_password          = var.fgt_admin_password
   sync2_ip_address            = var.sync_subnet_ip_address_2
   fortigate_hostname          = var.fortigate_hostname_1
+  public_subnet_cidr          = var.public_subnet_cidr1
+  private_subnet_cidr         = var.private_subnet_cidr_to_1
+  sync_subnet_cidr            = var.sync_subnet_cidr_1
+  ha_subnet_cidr              = var.ha_subnet_cidr_1
 }
 
 module "fortigate_2" {
@@ -443,6 +447,10 @@ module "fortigate_2" {
   fgt_admin_password          = var.fgt_admin_password
   sync2_ip_address            = var.sync_subnet_ip_address_1
   fortigate_hostname          = var.fortigate_hostname_2
+  public_subnet_cidr          = var.public_subnet_cidr2
+  private_subnet_cidr         = var.private_subnet_cidr_to_2
+  sync_subnet_cidr            = var.sync_subnet_cidr_2
+  ha_subnet_cidr              = var.ha_subnet_cidr_2
 }
 
 module "private1_to_route_table" {
