@@ -12,6 +12,7 @@
 \#*#
 *.swp
 *.pyc
+*.lic
 debug.log
 .repo_conf/*.retry
 **/.idea
