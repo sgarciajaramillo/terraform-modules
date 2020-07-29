@@ -26,7 +26,7 @@ end
 
 config system admin
 edit "admin"
-set password ${fgt_admin_password}
+set password  ${fgt_admin_password}
 next
 end
 

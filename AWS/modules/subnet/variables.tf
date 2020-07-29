@@ -29,3 +29,14 @@ variable "subnet_description" {
     description = "Description for the subnet tag"
 }
 
+variable "public_route" {
+  description = "Boolean to associate this subnet with Public Route Table"
+  default     = 0
+}
+
+variable "public_route_table_id" {
+  description = "Public Route Table Id"
+  default     = null
+}
+
+
