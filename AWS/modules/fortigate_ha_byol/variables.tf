@@ -140,3 +140,6 @@ variable "sync_subnet_cidr" {
 variable "ha_subnet_cidr" {
   description = "Fortigate Public Subnet CIDR"
 }
+variable "iam_instance_profile_id" {
+  description = "Fortigate IAM Instance Profile ID"
+}

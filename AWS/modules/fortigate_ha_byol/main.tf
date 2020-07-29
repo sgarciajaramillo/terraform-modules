@@ -123,7 +123,8 @@ resource "aws_instance" "fortigate" {
   instance_type               = var.fgt_instance_type
   availability_zone           = var.availability_zone
   key_name                    = var.keypair
-  user_data                  = data.template_file.fgt_userdata.rendered
+  user_data                   = data.template_file.fgt_userdata.rendered
+  iam_instance_profile        = var.iam_instance_profile_id
   network_interface {
     device_index = 0
     network_interface_id   = aws_network_interface.public_eni.id

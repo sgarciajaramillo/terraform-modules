@@ -369,6 +369,16 @@ module "ha-subnet-2" {
   public_route_table_id      = module.public1_route_table.id
 }
 
+module "iam_profile" {
+  source = "../../modules/instance_iam_role"
+
+  access_key                  = var.access_key
+  secret_key                  = var.secret_key
+  aws_region                  = var.aws_region
+    customer_prefix           = var.customer_prefix
+  environment                 = var.environment
+}
+
 module "fortigate_1" {
   source                      = "../../modules/fortigate_ha_byol"
 
@@ -409,6 +419,7 @@ module "fortigate_1" {
   private_subnet_cidr         = var.private_subnet_cidr_to_1
   sync_subnet_cidr            = var.sync_subnet_cidr_1
   ha_subnet_cidr              = var.ha_subnet_cidr_1
+  iam_instance_profile_id     = module.iam_profile.id
 }
 
 module "fortigate_2" {
@@ -451,6 +462,7 @@ module "fortigate_2" {
   private_subnet_cidr         = var.private_subnet_cidr_to_2
   sync_subnet_cidr            = var.sync_subnet_cidr_2
   ha_subnet_cidr              = var.ha_subnet_cidr_2
+  iam_instance_profile_id     = module.iam_profile.id
 }
 
 module "private1_to_route_table" {

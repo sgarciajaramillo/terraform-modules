@@ -1,0 +1,58 @@
+provider "aws" {
+  region     = var.aws_region
+  access_key = var.access_key
+  secret_key = var.secret_key
+}
+
+resource "aws_iam_role" "fortigate_role" {
+  name = "fortigate_role"
+
+  assume_role_policy = <<EOF
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Action": "sts:AssumeRole",
+      "Principal": {
+        "Service": "ec2.amazonaws.com"
+      },
+      "Effect": "Allow",
+      "Sid": ""
+    }
+  ]
+}
+EOF
+  tags = {
+    Name = "${var.customer_prefix}-${var.environment}-iam-role"
+  }
+}
+
+resource "aws_iam_instance_profile" "fortigate_profile" {
+  name = "fortigate_profile"
+  role = aws_iam_role.fortigate_role.name
+}
+
+resource "aws_iam_role_policy" "fortigate_policy" {
+  name = "fortigate_policy"
+  role = aws_iam_role.fortigate_role.id
+
+  policy = <<EOF
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Action": [
+        "ec2:Describe*",
+        "ec2:AssociateAddress",
+        "ec2:AssignPrivateIpAddresses",
+        "ec2:UnassignPrivateIpAddresses",
+        "ec2:ReplaceRoute",
+        "s3:GetObject"
+      ],
+      "Effect": "Allow",
+      "Resource": "*"
+    }
+  ]
+}
+EOF
+}
