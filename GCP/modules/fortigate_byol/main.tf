@@ -1,9 +1,10 @@
-# Compute Engine Instance - Active
+# Compute Engine Instance
 resource "google_compute_instance" "fgt_byol_instance" {
   name           = "terraform-fgt-byol-instance"
   machine_type   = var.machine
   zone           = var.zone
   can_ip_forward = "true"
+  tags           = ["fgt-instance"]
 
   boot_disk {
     initialize_params {

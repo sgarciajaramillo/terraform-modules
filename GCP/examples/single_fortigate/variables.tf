@@ -5,6 +5,11 @@ variable "zone" {}
 variable "machine" {}
 variable "image" {}
 variable "license_file" {}
+variable "password" {
+  type        = string
+  default     = "ftntCl0ud"
+  description = "FGT Password"
+}
 # vpc module
 variable "vpcs" {}
 # subnet module
