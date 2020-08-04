@@ -4,9 +4,6 @@ variable "secret_key" {}
 variable "aws_region" {
   description = "Provide the region to deploy the VPC in"
 }
-variable "ami_id" {
-  description = "AMI ID of instances in the autoscale group"
-}
 variable "vpc_id" {
   description = "The VPC Id of the newly created VPC."
 }

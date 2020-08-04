@@ -15,3 +15,9 @@ resource "aws_subnet" "subnet" {
     Environment = var.environment
   }
 }
+
+resource "aws_route_table_association" "rta" {
+  count          = var.public_route
+  subnet_id      = aws_subnet.subnet.id
+  route_table_id = var.public_route_table_id
+}
