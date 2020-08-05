@@ -56,3 +56,17 @@ config system ha
     set unicast-hb-peerip ${active_hb_ip}
     set unicast-hb-netmask ${hb_netmask}
 end
+config system sdn-connector
+    edit "gcp"
+        set type gcp
+        set ha-status enable
+        config external-ip
+            edit ${clusterip}
+            next
+        end
+        config route
+            edit ${internalroute}
+            next
+        end
+    next
+end

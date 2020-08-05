@@ -1,4 +1,4 @@
-# Compute Engine Instance - Active
+# Compute Engine Instance - nginx
 resource "google_compute_instance" "nginx_instance" {
   name           = "terraform-nginx-instance-${var.random_string}"
   machine_type   = var.machine

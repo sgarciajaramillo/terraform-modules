@@ -29,6 +29,7 @@ This example creates a HA Active-Passive configuration.
         - Deploys License
         - Updates Password
         - Configures HA
+        - Configures GCP SDN Connector
 
 ## How do you run these examples?
 

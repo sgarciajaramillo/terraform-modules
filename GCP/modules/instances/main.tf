@@ -4,6 +4,7 @@ resource "google_compute_instance" "active_instance" {
   machine_type   = var.machine
   zone           = var.zone
   can_ip_forward = "true"
+  tags           = ["ha-instance"]
 
   boot_disk {
     initialize_params {
@@ -61,6 +62,7 @@ resource "google_compute_instance" "passive_instance" {
   machine_type   = var.machine
   zone           = var.zone
   can_ip_forward = "true"
+  tags           = ["ha-instance"]
 
   boot_disk {
     initialize_params {
@@ -72,8 +74,6 @@ resource "google_compute_instance" "passive_instance" {
   network_interface {
     network    = var.public_vpc_network
     subnetwork = var.public_subnet
-    access_config {
-    }
   }
 
   # Private Network
