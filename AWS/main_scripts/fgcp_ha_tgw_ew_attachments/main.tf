@@ -681,24 +681,6 @@ data "aws_ami" "ubuntu" {
 
 #
 # EC2 Endpoint Resources
-module "ec2-public-sg" {
-  source = "../../modules/security_group"
-  access_key           = var.access_key
-  secret_key           = var.secret_key
-  aws_region           = var.aws_region
-  vpc_id               = module.vpc-security.vpc_id
-  name                 = var.sg_name
-  ingress_to_port         = 0
-  ingress_from_port       = 0
-  ingress_protocol        = "-1"
-  ingress_cidr_for_access = "0.0.0.0/0"
-  egress_to_port          = 0
-  egress_from_port        = 0
-  egress_protocol         = "-1"
-  egress_cidr_for_access = "0.0.0.0/0"
-  customer_prefix      = var.customer_prefix
-  environment          = var.environment
-}
 
 module "ec2-east-sg" {
   source = "../../modules/security_group"
@@ -747,27 +729,6 @@ module "linux_iam_profile" {
   aws_region                  = var.aws_region
   customer_prefix             = var.customer_prefix
   environment                 = var.environment
-}
-
-module "aws_public_linux_instance" {
-  source                     = "../../modules/endpoints"
-  access_key                 = var.access_key
-  secret_key                 = var.secret_key
-  aws_region                 = var.aws_region
-  customer_prefix            = var.customer_prefix
-  environment                = var.environment
-  ami_id                     = data.aws_ami.ubuntu.id
-  vpc_id                     = module.vpc-security.vpc_id
-  subnet_id                  = module.public-subnet-1.id
-  private_ip                 = "10.0.1.11"
-  cidr_for_access            = var.cidr_for_access
-  instance_type              = var.linux_instance_type
-  key_pair                   = var.keypair
-  instance_count             = 1
-  public_ip                  = true
-  security_group             = module.ec2-public-sg.id
-  iam_instance_profile_id    = module.linux_iam_profile.id
-  description                = "Public Linux Instance"
 }
 
 module "aws_east_linux_instance" {
