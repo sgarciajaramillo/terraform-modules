@@ -68,36 +68,36 @@ variable "public2_description" {
     description = "Description Public 2 Subnet TAG"
 }
 
-variable "private_subnet_cidr_to_1" {
-    description = "CIDR for the Private 1 TO Subnet"
+variable "private_subnet_cidr_1" {
+    description = "CIDR for the Private 1 Subnet"
 }
-
-variable "private_subnet_cidr_from_1" {
-    description = "CIDR for the Private 1 FROM Subnet"
-}
-
-variable "private1_to_description" {
+variable "private1_description" {
     description = "Description Private 1 TO Subnet TAG"
 }
 
-variable "private1_from_description" {
-    description = "Description Private 2 TO Subnet TAG"
+variable "private1_subnet_tgw_cidr" {
+    description = "CIDR for the Private 1 TGW Subnet"
 }
 
-variable "private_subnet_cidr_to_2" {
+variable "private1_tgw_description" {
+    description = "Description Private 1 TGW Subnet TAG"
+}
+
+
+variable "private2_subnet_tgw_cidr" {
+    description = "CIDR for the Private 2 TGW Subnet"
+}
+
+variable "private2_tgw_description" {
+    description = "Description Private 2 TGW Subnet TAG"
+}
+
+variable "private_subnet_cidr_2" {
     description = "CIDR for the Private 2 TO Subnet"
 }
 
-variable "private_subnet_cidr_from_2" {
-    description = "CIDR for the Private 2 FROM Subnet"
-}
-
-variable "private2_to_description" {
-    description = "Description Private 2 TO Subnet TAG"
-}
-
-variable "private2_from_description" {
-    description = "Description Private 2 FROM Subnet TAG"
+variable "private2_description" {
+    description = "Description Private Subnet TAG"
 }
 
 variable "private2_ip_address" {
@@ -213,4 +213,12 @@ variable "fortigate_hostname_2" {
   description = "Fortigate Hostname 2"
 }
 
-
+#
+# Ubuntu Endpoint resources
+#
+variable "sg_name" {
+  description = "Linux Endpoint Security Group Name"
+}
+variable "linux_instance_type" {
+  description = "Linux Endpoint Instance Type"
+}

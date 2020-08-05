@@ -23,18 +23,19 @@ public_subnet_cidr2         = "10.0.10.0/24"
 public2_ip_address          = "10.0.10.10"
 public2_description         = "public2-subnet-az2"
 
-private_subnet_cidr_to_1    = "10.0.2.0/24"
+private1_subnet_tgw_cidr     = "10.0.6.0/24"
+private1_tgw_description     = "private-tgw-subnet-az1"
+
+private2_subnet_tgw_cidr     = "10.0.60.0/24"
+private2_tgw_description     = "private-tgw-subnet-az2"
+
+private_subnet_cidr_1       = "10.0.2.0/24"
 private1_ip_address         = "10.0.2.10"
-private_subnet_cidr_from_1  = "10.0.6.0/24"
+private1_description        = "private1-subnet-az1"
 
-private_subnet_cidr_to_2    = "10.0.20.0/24"
+private_subnet_cidr_2       = "10.0.20.0/24"
 private2_ip_address         = "10.0.20.10"
-private_subnet_cidr_from_2  = "10.0.60.0/24"
-
-private1_to_description     = "private1-to_subnet-az1"
-private1_from_description   = "private1-from-subnet-az1"
-private2_to_description     = "private2-to_subnet-az2"
-private2_from_description   = "private2-from-subnet-az2"
+private2_description        = "private2-subnet-az2"
 
 sync_subnet_cidr_1          = "10.0.4.0/24"
 sync_subnet_ip_address_1    = "10.0.4.10"
@@ -71,5 +72,10 @@ fgt_admin_password          = "Texas4me!"
 fortigate_hostname_1        = "fgt-active"
 fortigate_hostname_2        = "fgt-passive"
 
+#
+# Endpoints info
+#
+sg_name                        = "ec2"
+linux_instance_type            = "t2.micro"
 
 

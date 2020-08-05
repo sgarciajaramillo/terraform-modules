@@ -50,10 +50,6 @@ variable "private_subnet_id" {
   description = "Private Subnet ID"
 }
 
-variable "private2_subnet_id" {
-  description = "Private Subnet 2 ID"
-}
-
 variable "private_ip_address" {
   description = "Private ENI IP address"
 }
@@ -87,10 +83,6 @@ variable "spoke1_cidr" {
 }
 variable "spoke2_cidr" {
   description = "CIDR For VPC 2 attached to TGW"
-}
-
-variable "from_cidr" {
-  description = "CIDR For From Subnet"
 }
 
 variable "security_group_public_id" {

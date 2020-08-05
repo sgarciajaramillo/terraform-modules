@@ -4,6 +4,12 @@ variable "secret_key" {}
 variable "aws_region" {
   description = "Provide the region to use"
 }
+variable "customer_prefix" {
+  description = "Customer Prefix to apply to all resources"
+}
+variable "environment" {
+  description = "The Tag Environment in the S3 tag"
+}
 variable "ami_id" {
   description = "AMI ID for the new instance"
 }
@@ -13,14 +19,11 @@ variable "vpc_id" {
 variable "subnet_id" {
   description = "Provide the ID for the subnet"
 }
-variable "keypair" {
-  description = "Provide a keypair for accessing the FortiGate instance"
+variable "private_ip" {
+  description = "Private IP associated with Instance"
 }
-variable "customer_prefix" {
-  description = "Customer Prefix to apply to all resources"
-}
-variable "environment" {
-  description = "The Tag Environment in the S3 tag"
+variable "key_pair" {
+  description = "Key Pair associated with Instance"
 }
 variable "cidr_for_access" {
   description = "CIDR to use for security group access"
@@ -33,9 +36,15 @@ variable "instance_count" {
 }
 variable "public_ip" {
   description = "Boolean - Associate Public IP address"
+  type = bool
   default = false
 }
 variable "security_group" {
   description = "Security Group for the instance"
 }
-
+variable "iam_instance_profile_id" {
+  description = "Linux IAM Instance Profile ID"
+}
+variable "description" {
+  description = "EC2 Instance Description"
+}

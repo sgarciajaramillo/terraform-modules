@@ -9,7 +9,7 @@ output "public1_subnet_id" {
 }
 
 output "private1_subnet_id" {
-  value       = module.private-subnet-to-1.id
+  value       = module.private-subnet-1.id
   description = "The Private Subnet ID for AZ 1"
 }
 
@@ -33,7 +33,7 @@ output "public2_subnet_id" {
 }
 
 output "private2_subnet_id" {
-  value         = module.private-subnet-to-2.id
+  value         = module.private-subnet-2.id
     description = "The Private Subnet ID for AZ 2"
 }
 

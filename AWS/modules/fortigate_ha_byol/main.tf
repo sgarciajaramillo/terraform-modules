@@ -32,9 +32,6 @@ data "aws_subnet" "private_id" {
   id = var.private_subnet_id
 }
 
-data "aws_subnet" "private2_id" {
-  id = var.private2_subnet_id
-}
 
 data "aws_subnet" "mgmt_id" {
   id = var.ha_subnet_id
@@ -50,12 +47,10 @@ data "template_file" "fgt_userdata" {
     Port3IP              = aws_network_interface.sync_eni.private_ip
     Port4IP              = aws_network_interface.ha_eni.private_ip
     PrivateSubnet        = data.aws_subnet.private_id.cidr_block
-    Private2Subnet       = data.aws_subnet.private2_id.cidr_block
     spoke1_cidr          = var.spoke1_cidr
     spoke2_cidr          = var.spoke2_cidr
     mgmt_cidr            = data.aws_subnet.mgmt_id.cidr_block
     mgmt_gw              = cidrhost(data.aws_subnet.mgmt_id.cidr_block, 1)
-    tgw_gw               = cidrhost(var.from_cidr, 1)
     fgt_priority         = var.fgt_priority
     fgt_ha_password      = var.fgt_ha_password
     fgt_byol_license     = file("${path.module}/${var.fgt_byol_license}")

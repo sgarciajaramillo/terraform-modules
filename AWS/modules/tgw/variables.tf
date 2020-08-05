@@ -28,12 +28,12 @@ variable "auto_accept_shared_attachments" {
 
 variable "default_route_table_association" {
   description = "Whether resource attachments are automatically associated with the default route table association"
-  default     = "enable"
+  default     = "disable"
 }
 
 variable "default_route_table_propagation" {
   description = "Whether resource attachments automatically propagate routes to the default propagation route table"
-  default     = "enable"
+  default     = "disable"
 }
 
 variable "dns_support" {

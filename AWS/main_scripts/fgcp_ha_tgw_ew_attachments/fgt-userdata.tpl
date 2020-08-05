@@ -61,18 +61,13 @@ set gateway ${PrivateSubnetRouterIP}
 next
 edit 3
 set device port2
-set dst ${Private2Subnet}
+set dst ${spoke1_cidr}
 set gateway ${PrivateSubnetRouterIP}
 next
 edit 4
 set device port2
-set dst ${spoke1_cidr}
-set gateway ${tgw_gw}
-next
-edit 5
-set device port2
 set dst ${spoke2_cidr}
-set gateway ${tgw_gw}
+set gateway ${PrivateSubnetRouterIP}
 next
 end
 config firewall address
@@ -89,6 +84,22 @@ end
 config firewall addrgrp
 edit to-WEST
 set member toSpoke1 toSpoke2 toMgmt
+end
+config firewall vip
+edit "vip_to_east"
+set extintf "port1"
+set portforward enable
+set mappedip "192.168.0.11"
+set extport 2222
+set mappedport 22
+next
+edit "vip_to_west"
+set extintf "port1"
+set portforward enable
+set mappedip "192.168.1.11"
+set extport 2223
+set mappedport 22
+next
 end
 config firewall policy
 edit 1
@@ -114,6 +125,29 @@ set schedule always
 set service ALL
 set logtraffic all
 set nat enable
+next
+edit 3
+set name "vip_to_east"
+set srcintf "port1"
+set dstintf "port2"
+set srcaddr "all"
+set dstaddr "vip_to_east"
+set action accept
+set schedule "always"
+set service "ALL"
+set logtraffic all
+next
+edit 4
+set name "vip_to_west"
+set srcintf "port1"
+set dstintf "port2"
+set srcaddr "all"
+set dstaddr "vip_to_west"
+set action accept
+set schedule "always"
+set service "ALL"
+set logtraffic all
+next
 end
 config system ha
 set group-name fortinet

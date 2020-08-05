@@ -10,15 +10,6 @@ variable "vpc_id" {
 variable "name" {
   description = "Security Group Name suffix"
 }
-variable "security_group_dmz_id" {
-  description = "Security Group for DMZ ENI"
-}
-variable "security_group_ws_id" {
-  description = "Security Group for WS ENI"
-}
-variable "security_group_trust_id" {
-  description = "Security Group for TRUST ENI"
-}
 variable "ingress_from_port" {
   description = "Ingress from port for security group"
 }

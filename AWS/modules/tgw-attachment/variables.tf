@@ -36,10 +36,10 @@ variable "vpc_id" {
 
 variable transit_gateway_default_route_table_association {
   description = "Boolean whether the VPC Attachment should be associated with the EC2 Transit Gateway association default route table"
-  default = "true"
+  default = "false"
 }
 
 variable transit_gateway_default_route_table_propogation {
   description = "Boolean whether the VPC Attachment should propagate routes with the EC2 Transit Gateway propagation default route table"
-  default = "true"
+  default = "false"
 }
