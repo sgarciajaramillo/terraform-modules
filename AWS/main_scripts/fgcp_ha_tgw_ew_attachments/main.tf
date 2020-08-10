@@ -14,8 +14,7 @@ data "aws_ami" "fortigate_byol" {
 
   filter {
     name                         = "name"
-    values                       = [
-      var.fortigate_ami_string]
+    values                       = [var.fortigate_ami_string]
   }
 
   filter {
