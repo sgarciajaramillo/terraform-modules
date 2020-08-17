@@ -17,41 +17,41 @@ vpc_name_west               = "west"
 
 public_subnet_cidr1         = "10.0.1.0/24"
 public1_ip_address          = "10.0.1.10"
-public1_description         = "public1-subnet-az1"
+public1_description         = "public1-az1"
 
 public_subnet_cidr2         = "10.0.10.0/24"
 public2_ip_address          = "10.0.10.10"
-public2_description         = "public2-subnet-az2"
+public2_description         = "public2-az2"
 
 private1_subnet_tgw_cidr     = "10.0.6.0/24"
-private1_tgw_description     = "private-tgw-subnet-az1"
+private1_tgw_description     = "private-tgw-az1"
 
 private2_subnet_tgw_cidr     = "10.0.60.0/24"
-private2_tgw_description     = "private-tgw-subnet-az2"
+private2_tgw_description     = "private-tgw-az2"
 
 private_subnet_cidr_1       = "10.0.2.0/24"
 private1_ip_address         = "10.0.2.10"
-private1_description        = "private1-subnet-az1"
+private1_description        = "private1-az1"
 
 private_subnet_cidr_2       = "10.0.20.0/24"
 private2_ip_address         = "10.0.20.10"
-private2_description        = "private2-subnet-az2"
+private2_description        = "private2-az2"
 
 sync_subnet_cidr_1          = "10.0.4.0/24"
 sync_subnet_ip_address_1    = "10.0.4.10"
-sync_description_1          = "sync-subnet-az1"
+sync_description_1          = "sync-az1"
 
 sync_subnet_cidr_2          = "10.0.40.0/24"
 sync_subnet_ip_address_2    = "10.0.40.10"
-sync_description_2          = "sync-subnet-az2"
+sync_description_2          = "sync-az2"
 
 ha_subnet_cidr_1            = "10.0.5.0/24"
 ha_subnet_ip_address_1      = "10.0.5.10"
-ha_description_1            = "hamgmt-subnet-az1"
+ha_description_1            = "hamgmt-az1"
 
 ha_subnet_cidr_2            = "10.0.50.0/24"
 ha_subnet_ip_address_2      = "10.0.50.10"
-ha_description_2            = "hamgmt-subnet-az2"
+ha_description_2            = "hamgmt-az2"
 
 keypair                     = "mdw-key-oregon"
 cidr_for_access             = "0.0.0.0/0"

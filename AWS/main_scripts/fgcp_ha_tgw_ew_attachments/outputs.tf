@@ -1,15 +1,15 @@
 output "vpc_id" {
-  value       = module.vpc-security.vpc_id
+  value       = module.base-vpc.vpc_id
   description = "The VPC Id of the newly created VPC."
 }
 
 output "public1_subnet_id" {
-  value       = module.public-subnet-1.id
+  value       = module.base-vpc.public1_subnet_id
   description = "The Public Subnet ID for AZ 1"
 }
 
 output "private1_subnet_id" {
-  value       = module.private-subnet-1.id
+  value       = module.base-vpc.private1_subnet_id
   description = "The Private Subnet ID for AZ 1"
 }
 
@@ -28,12 +28,12 @@ output "fortigate_1_instance_id" {
 }
 
 output "public2_subnet_id" {
-  value       = module.public-subnet-2.id
+  value       = module.base-vpc.public2_subnet_id
   description = "The Fortigate ENI ID in the Public Subnet in AZ 2"
 }
 
 output "private2_subnet_id" {
-  value         = module.private-subnet-2.id
+  value         = module.base-vpc.private2_subnet_id
     description = "The Private Subnet ID for AZ 2"
 }
 

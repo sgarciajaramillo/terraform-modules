@@ -78,8 +78,7 @@ resource "aws_network_interface" "public_eni" {
 
 resource "aws_network_interface" "private_eni" {
   subnet_id                   = var.private_subnet_id
-  private_ips                 = [
-    var.private_ip_address]
+  private_ips                 = [ var.private_ip_address ]
   security_groups             = [ var.security_group_private_id ]
   source_dest_check           = false
 
@@ -90,8 +89,7 @@ resource "aws_network_interface" "private_eni" {
 
 resource "aws_network_interface" "sync_eni" {
   subnet_id                   = var.sync_subnet_id
-  private_ips                 = [
-    var.sync_ip_address]
+  private_ips                 = [ var.sync_ip_address ]
   security_groups             = [ var.security_group_public_id ]
   source_dest_check           = false
 
@@ -102,8 +100,7 @@ resource "aws_network_interface" "sync_eni" {
 
 resource "aws_network_interface" "ha_eni" {
   subnet_id                   = var.ha_subnet_id
-  private_ips                 = [
-    var.ha_ip_address]
+  private_ips                 = [ var.ha_ip_address ]
   security_groups             = [ var.security_group_private_id ]
   source_dest_check           = false
 

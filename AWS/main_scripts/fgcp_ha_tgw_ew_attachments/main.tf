@@ -3,6 +3,7 @@ provider "aws" {
   region     = var.aws_region
   access_key = var.access_key
   secret_key = var.secret_key
+  version    = "~> 3.0"
 }
 
 #
@@ -31,7 +32,7 @@ data "aws_ami" "fortigate_byol" {
 resource aws_security_group "allow_private_subnets" {
   name = "allow_private_subnets"
   description = "Allow all traffic from Private Subnets"
-  vpc_id = module.vpc-security.vpc_id
+  vpc_id = module.base-vpc.vpc_id
   ingress {
     from_port = 0
     to_port = 0
@@ -55,7 +56,7 @@ resource aws_security_group "allow_private_subnets" {
 resource aws_security_group "allow_public_subnets" {
   name = "allow_public_subnets"
   description = "Allow all traffic from public Subnets"
-  vpc_id = module.vpc-security.vpc_id
+  vpc_id = module.base-vpc.vpc_id
   ingress {
     from_port = 0
     to_port = 0
@@ -73,6 +74,35 @@ resource aws_security_group "allow_public_subnets" {
   }
 }
 
+#
+# VPC Setups, route tables, route table associations
+#
+
+#
+# Security VPC, IGW, Subnets, Route Tables, Route Table Associations, VPC Endpoint
+#
+module "base-vpc" {
+  source                          = "../base_vpc_dual_az"
+  access_key                      = var.access_key
+  secret_key                      = var.secret_key
+  aws_region                      = var.aws_region
+  customer_prefix                 = var.customer_prefix
+  environment                     = var.environment
+  vpc_name                        = var.vpc_name_security
+  availability_zone1              = var.availability_zone_1
+  availability_zone2              = var.availability_zone_2
+  vpc_cidr                        = var.vpc_cidr_security
+  public1_subnet_cidr             = var.public_subnet_cidr1
+  public2_subnet_cidr             = var.public_subnet_cidr2
+  private1_subnet_cidr            = var.private_subnet_cidr_1
+  private2_subnet_cidr            = var.private_subnet_cidr_2
+  public1_description             = var.public1_description
+  public2_description             = var.public2_description
+  private1_description            = var.private1_description
+  private2_description            = var.private2_description
+
+}
+
 module "vpc-transit-gateway" {
   source                          = "../../modules/tgw"
   access_key                      = var.access_key
@@ -88,36 +118,56 @@ module "vpc-transit-gateway" {
 }
 
 #
+# Point the private route table default route to the TGW
+#
+resource "aws_route" "tgw1" {
+  route_table_id         = module.base-vpc.private1_route_table_id
+  destination_cidr_block = "0.0.0.0/0"
+  transit_gateway_id     = module.vpc-transit-gateway.tgw_id
+}
+
+
+resource "aws_route" "tgw2" {
+  route_table_id         = module.base-vpc.private2_route_table_id
+  destination_cidr_block = "0.0.0.0/0"
+  transit_gateway_id     = module.vpc-transit-gateway.tgw_id
+}
+
+#
 # Security VPC Transit Gateway Attachment, Route Table and Routes
 #
 module "vpc-transit-gateway-attachment-security" {
-  source                          = "../../modules/tgw-attachment"
-  access_key                      = var.access_key
-  secret_key                      = var.secret_key
-  aws_region                      = var.aws_region
-  customer_prefix                 = var.customer_prefix
-  environment                     = var.environment
-  vpc_name                        = var.vpc_name_security
-  transit_gateway_id              = module.vpc-transit-gateway.tgw_id
-  subnet_ids                      = [ module.private1-subnet-tgw.id, module.private2-subnet-tgw.id ]
+  source                                          = "../../modules/tgw-attachment"
+  access_key                                      = var.access_key
+  secret_key                                      = var.secret_key
+  aws_region                                      = var.aws_region
+  customer_prefix                                 = var.customer_prefix
+  environment                                     = var.environment
+  vpc_name                                        = var.vpc_name_security
+  transit_gateway_id                              = module.vpc-transit-gateway.tgw_id
+  subnet_ids                                      = [ module.private1-subnet-tgw.id, module.private2-subnet-tgw.id ]
   transit_gateway_default_route_table_propogation = "false"
-  vpc_id                          = module.vpc-security.vpc_id
+  vpc_id                                          = module.base-vpc.vpc_id
 }
+
 resource "aws_ec2_transit_gateway_route_table" "security" {
   transit_gateway_id = module.vpc-transit-gateway.tgw_id
   tags = {
     Name = "${var.customer_prefix}-${var.environment}-Security VPC TGW Route Table"
   }
 }
+
 resource "aws_ec2_transit_gateway_route_table_association" "security" {
   transit_gateway_attachment_id  = module.vpc-transit-gateway-attachment-security.tgw_attachment_id
   transit_gateway_route_table_id = aws_ec2_transit_gateway_route_table.security.id
 }
+
 resource "aws_ec2_transit_gateway_route" "tgw_route_security_default" {
   destination_cidr_block         = var.vpc_cidr_west
   transit_gateway_route_table_id = aws_ec2_transit_gateway_route_table.security.id
   transit_gateway_attachment_id  = module.vpc-transit-gateway-attachment-west.tgw_attachment_id
 }
+
 resource "aws_ec2_transit_gateway_route" "tgw_route_security_cidr" {
   destination_cidr_block         = var.vpc_cidr_east
   transit_gateway_route_table_id = aws_ec2_transit_gateway_route_table.security.id
@@ -128,17 +178,17 @@ resource "aws_ec2_transit_gateway_route" "tgw_route_security_cidr" {
 # East VPC Transit Gateway Attachment, Route Table and Routes
 #
 module "vpc-transit-gateway-attachment-east" {
-  source                          = "../../modules/tgw-attachment"
-  access_key                      = var.access_key
-  secret_key                      = var.secret_key
-  aws_region                      = var.aws_region
-  customer_prefix                 = var.customer_prefix
-  environment                     = var.environment
-  vpc_name                        = var.vpc_name_east
-  transit_gateway_id              = module.vpc-transit-gateway.tgw_id
-  subnet_ids                      = [ module.subnet-east.id ]
+  source                                          = "../../modules/tgw-attachment"
+  access_key                                      = var.access_key
+  secret_key                                      = var.secret_key
+  aws_region                                      = var.aws_region
+  customer_prefix                                 = var.customer_prefix
+  environment                                     = var.environment
+  vpc_name                                        = var.vpc_name_east
+  transit_gateway_id                              = module.vpc-transit-gateway.tgw_id
+  subnet_ids                                      = [ module.subnet-east.id ]
   transit_gateway_default_route_table_propogation = "false"
-  vpc_id                          = module.vpc-east.vpc_id
+  vpc_id                                          = module.vpc-east.vpc_id
 }
 
 resource "aws_ec2_transit_gateway_route_table" "east" {
@@ -203,177 +253,12 @@ resource "aws_ec2_transit_gateway_route" "tgw_route_west_default" {
   transit_gateway_attachment_id  = module.vpc-transit-gateway-attachment-security.tgw_attachment_id
 }
 
-#
-# VPC Setups, route tables, route table associations
-#
-
-#
-# Security VPC, IGW, Subnets, Route Tables, Route Table Associations, VPC Endpoint
-#
-module "vpc-security" {
-  source = "../../modules/vpc"
-
-  access_key                 = var.access_key
-  secret_key                 = var.secret_key
-  aws_region                 = var.aws_region
-  environment                = var.environment
-  customer_prefix            = "${var.customer_prefix}-security"
-  vpc_cidr                   = var.vpc_cidr_security
-}
 
 resource "aws_default_route_table" "route_security" {
-  default_route_table_id = module.vpc-security.vpc_main_route_table_id
+  default_route_table_id = module.base-vpc.vpc_main_route_table_id
   tags = {
     Name = "default table for security vpc (unused)"
   }
-}
-
-module "igw" {
-  source = "../../modules/igw"
-
-  access_key                 = var.access_key
-  secret_key                 = var.secret_key
-  aws_region                 = var.aws_region
-  environment                = var.environment
-  customer_prefix            = var.customer_prefix
-  vpc_id                     = module.vpc-security.vpc_id
-}
-
-#
-# Public AZ1 and AZ2 Subnet, Route Table and Associations
-# Both public1 and public2 subnets are associated with the public1 route table
-#
-module "public-subnet-1" {
-  source = "../../modules/subnet"
-
-  access_key                 = var.access_key
-  secret_key                 = var.secret_key
-  aws_region                 = var.aws_region
-  environment                = var.environment
-  customer_prefix            = var.customer_prefix
-  vpc_id                     = module.vpc-security.vpc_id
-  availability_zone          = var.availability_zone_1
-  subnet_cidr                = var.public_subnet_cidr1
-  subnet_description         = var.public1_description
-  public_route               = 1
-  public_route_table_id      = module.public1_route_table.id
-}
-
-module "public-subnet-2" {
-  source = "../../modules/subnet"
-
-  access_key                 = var.access_key
-  secret_key                 = var.secret_key
-  aws_region                 = var.aws_region
-  environment                = var.environment
-  customer_prefix            = var.customer_prefix
-  vpc_id                     = module.vpc-security.vpc_id
-  availability_zone          = var.availability_zone_2
-  subnet_cidr                = var.public_subnet_cidr2
-  subnet_description         = var.public2_description
-  public_route               = 1
-  public_route_table_id      = module.public1_route_table.id
-}
-
-
-module "public1_route_table" {
-  source                     = "../../modules/route_table"
-
-  access_key                 = var.access_key
-  secret_key                 = var.secret_key
-  aws_region                 = var.aws_region
-  customer_prefix            = var.customer_prefix
-  environment                = var.environment
-  vpc_id                     = module.vpc-security.vpc_id
-  igw_id                     = module.igw.igw_id
-  gateway_route              = 1
-  route_description          = "Public Route Table"
-}
-
-#
-# Private Subnet in AZ1
-#
-module "private-subnet-1" {
-  source = "../../modules/subnet"
-
-  access_key                 = var.access_key
-  secret_key                 = var.secret_key
-  aws_region                 = var.aws_region
-  environment                = var.environment
-  customer_prefix            = var.customer_prefix
-  vpc_id                     = module.vpc-security.vpc_id
-  availability_zone          = var.availability_zone_1
-  subnet_cidr                = var.private_subnet_cidr_1
-  subnet_description         = var.private1_description
-}
-
-module "private1_route_table" {
-  source                     = "../../modules/route_table"
-  access_key                 = var.access_key
-  secret_key                 = var.secret_key
-  aws_region                 = var.aws_region
-  customer_prefix            = var.customer_prefix
-  environment                = var.environment
-  tgw_route                  = 1
-  vpc_id                     = module.vpc-security.vpc_id
-  tgw_id                     = module.vpc-transit-gateway.tgw_id
-  route_description          = "Private 1 Route Table"
-}
-
-
-module "private1_route_table_association" {
-  source                     = "../../modules/route_table_association"
-
-  access_key                 = var.access_key
-  secret_key                 = var.secret_key
-  aws_region                 = var.aws_region
-  customer_prefix            = var.customer_prefix
-  environment                = var.environment
-  subnet_ids                 = module.private-subnet-1.id
-  route_table_id             = module.private1_route_table.id
-}
-
-#
-# Private Subnet in AZ2
-#
-module "private-subnet-2" {
-  source = "../../modules/subnet"
-
-  access_key                 = var.access_key
-  secret_key                 = var.secret_key
-  aws_region                 = var.aws_region
-  environment                = var.environment
-  customer_prefix            = var.customer_prefix
-  vpc_id                     = module.vpc-security.vpc_id
-  availability_zone          = var.availability_zone_2
-  subnet_cidr                = var.private_subnet_cidr_2
-  subnet_description         = var.private2_description
-}
-
-module "private2_route_table" {
-  source                     = "../../modules/route_table"
-  access_key                 = var.access_key
-  secret_key                 = var.secret_key
-  aws_region                 = var.aws_region
-  customer_prefix            = var.customer_prefix
-  environment                = var.environment
-  vpc_id                     = module.vpc-security.vpc_id
-  tgw_route                  = 1
-  tgw_id                     = module.vpc-transit-gateway.tgw_id
-  route_description          = "Private 2 Route Table"
-}
-
-
-module "private2_to_route_table_association" {
-  source                     = "../../modules/route_table_association"
-
-  access_key                 = var.access_key
-  secret_key                 = var.secret_key
-  aws_region                 = var.aws_region
-  customer_prefix            = var.customer_prefix
-  environment                = var.environment
-  subnet_ids                 = module.private-subnet-2.id
-  route_table_id             = module.private2_route_table.id
 }
 
 #
@@ -388,7 +273,7 @@ module "private1-subnet-tgw" {
   aws_region                 = var.aws_region
   environment                = var.environment
   customer_prefix            = var.customer_prefix
-  vpc_id                     = module.vpc-security.vpc_id
+  vpc_id                     = module.base-vpc.vpc_id
   availability_zone          = var.availability_zone_1
   subnet_cidr                = var.private1_subnet_tgw_cidr
   subnet_description         = var.private1_tgw_description
@@ -401,7 +286,7 @@ module "private1_tgw_route_table" {
   aws_region                 = var.aws_region
   customer_prefix            = var.customer_prefix
   environment                = var.environment
-  vpc_id                     = module.vpc-security.vpc_id
+  vpc_id                     = module.base-vpc.vpc_id
   eni_route                  = 1
   eni_id                     = module.fortigate_1.network_private_interface_id
   route_description          = "Private 1 TGW Route Table"
@@ -427,7 +312,7 @@ module "private2-subnet-tgw" {
   aws_region                 = var.aws_region
   environment                = var.environment
   customer_prefix            = var.customer_prefix
-  vpc_id                     = module.vpc-security.vpc_id
+  vpc_id                     = module.base-vpc.vpc_id
   availability_zone          = var.availability_zone_2
   subnet_cidr                = var.private2_subnet_tgw_cidr
   subnet_description         = var.private2_tgw_description
@@ -440,7 +325,7 @@ module "private2_tgw_route_table" {
   aws_region                 = var.aws_region
   customer_prefix            = var.customer_prefix
   environment                = var.environment
-  vpc_id                     = module.vpc-security.vpc_id
+  vpc_id                     = module.base-vpc.vpc_id
   eni_route                  = 1
   eni_id                     = module.fortigate_1.network_private_interface_id
   route_description          = "Private 2 TGW Route Table"
@@ -466,7 +351,7 @@ module "sync-subnet-1" {
   aws_region                 = var.aws_region
   environment                = var.environment
   customer_prefix            = var.customer_prefix
-  vpc_id                     = module.vpc-security.vpc_id
+  vpc_id                     = module.base-vpc.vpc_id
   availability_zone          = var.availability_zone_1
   subnet_cidr                = var.sync_subnet_cidr_1
   subnet_description         = var.sync_description_1
@@ -480,7 +365,7 @@ module "sync-subnet-2" {
   aws_region                 = var.aws_region
   environment                = var.environment
   customer_prefix            = var.customer_prefix
-  vpc_id                     = module.vpc-security.vpc_id
+  vpc_id                     = module.base-vpc.vpc_id
   availability_zone          = var.availability_zone_2
   subnet_cidr                = var.sync_subnet_cidr_2
   subnet_description         = var.sync_description_2
@@ -494,12 +379,12 @@ module "ha-subnet-1" {
   aws_region                 = var.aws_region
   environment                = var.environment
   customer_prefix            = var.customer_prefix
-  vpc_id                     = module.vpc-security.vpc_id
+  vpc_id                     = module.base-vpc.vpc_id
   availability_zone          = var.availability_zone_1
   subnet_cidr                = var.ha_subnet_cidr_1
   subnet_description         = var.ha_description_1
   public_route               = 1
-  public_route_table_id      = module.public1_route_table.id
+  public_route_table_id      = module.base-vpc.public_route_table_id
 }
 
 module "ha-subnet-2" {
@@ -510,12 +395,12 @@ module "ha-subnet-2" {
   aws_region                 = var.aws_region
   environment                = var.environment
   customer_prefix            = var.customer_prefix
-  vpc_id                     = module.vpc-security.vpc_id
+  vpc_id                     = module.base-vpc.vpc_id
   availability_zone          = var.availability_zone_2
   subnet_cidr                = var.ha_subnet_cidr_2
   subnet_description         = var.ha_description_2
   public_route               = 1
-  public_route_table_id      = module.public1_route_table.id
+  public_route_table_id      = module.base-vpc.public_route_table_id
 }
 
 #
@@ -529,8 +414,8 @@ module "vpc_s3_endpoint" {
   aws_region                 = var.aws_region
   customer_prefix            = var.customer_prefix
   environment                = var.environment
-  vpc_id                     = module.vpc-security.vpc_id
-  route_table_id             = [ module.public1_route_table.id ]
+  vpc_id                     = module.base-vpc.vpc_id
+  route_table_id             = [ module.base-vpc.public_route_table_id ]
 }
 
 #
@@ -543,7 +428,8 @@ module "vpc-east" {
   secret_key                 = var.secret_key
   aws_region                 = var.aws_region
   environment                = var.environment
-  customer_prefix            = "${var.customer_prefix}-east"
+  vpc_name                   = var.vpc_name_east
+  customer_prefix            = var.customer_prefix
   vpc_cidr                   = var.vpc_cidr_east
 }
 
@@ -558,7 +444,7 @@ module "subnet-east" {
   vpc_id                     = module.vpc-east.vpc_id
   availability_zone          = var.availability_zone_1
   subnet_cidr                = var.vpc_cidr_east
-  subnet_description         = "${var.customer_prefix}-east-subnet"
+  subnet_description         = "east"
 }
 
 #
@@ -577,6 +463,19 @@ resource "aws_default_route_table" "route_east" {
   }
 }
 
+module "rta-east" {
+  source = "../../modules/route_table_association"
+
+  access_key                 = var.access_key
+  secret_key                 = var.secret_key
+  aws_region                 = var.aws_region
+  environment                = var.environment
+  customer_prefix            = "${var.customer_prefix}-east"
+  subnet_ids                 = module.subnet-east.id
+  route_table_id             = module.vpc-east.vpc_main_route_table_id
+
+}
+
 #
 # West VPC
 #
@@ -587,7 +486,8 @@ module "vpc-west" {
   secret_key                 = var.secret_key
   aws_region                 = var.aws_region
   environment                = var.environment
-  customer_prefix            = "${var.customer_prefix}-west"
+  vpc_name                   = var.vpc_name_west
+  customer_prefix            = var.customer_prefix
   vpc_cidr                   = var.vpc_cidr_west
 
 }
@@ -603,7 +503,7 @@ module "subnet-west" {
   vpc_id                     = module.vpc-west.vpc_id
   availability_zone          = var.availability_zone_1
   subnet_cidr                = var.vpc_cidr_west
-  subnet_description         = "${var.customer_prefix}-west-subnet"
+  subnet_description         = "west"
 }
 #
 # Default route table that is created with the west VPC. We just need to add a default route
@@ -619,6 +519,18 @@ resource "aws_default_route_table" "route_west" {
   tags = {
     Name = "default table for vpc west"
   }
+}
+
+module "rta-west" {
+  source = "../../modules/route_table_association"
+
+  access_key                 = var.access_key
+  secret_key                 = var.secret_key
+  aws_region                 = var.aws_region
+  environment                = var.environment
+  customer_prefix            = "${var.customer_prefix}-west"
+  subnet_ids                 = module.subnet-west.id
+  route_table_id             = module.vpc-west.vpc_main_route_table_id
 }
 
 #
@@ -643,9 +555,9 @@ module "fortigate_1" {
   availability_zone           = var.availability_zone_1
   customer_prefix             = var.customer_prefix
   environment                 = var.environment
-  public_subnet_id            = module.public-subnet-1.id
+  public_subnet_id            = module.base-vpc.public1_subnet_id
   public_ip_address           = var.public1_ip_address
-  private_subnet_id           = module.private-subnet-1.id
+  private_subnet_id           = module.base-vpc.private1_subnet_id
   private_ip_address          = var.private1_ip_address
   sync_subnet_id              = module.sync-subnet-1.id
   sync_ip_address             = var.sync_subnet_ip_address_1
@@ -684,9 +596,9 @@ module "fortigate_2" {
   availability_zone           = var.availability_zone_2
   customer_prefix             = var.customer_prefix
   environment                 = var.environment
-  public_subnet_id            = module.public-subnet-2.id
+  public_subnet_id            = module.base-vpc.public2_subnet_id
   public_ip_address           = var.public2_ip_address
-  private_subnet_id           = module.private-subnet-2.id
+  private_subnet_id           = module.base-vpc.private2_subnet_id
   private_ip_address          = var.private2_ip_address
   sync_subnet_id              = module.sync-subnet-2.id
   sync_ip_address             = var.sync_subnet_ip_address_2
@@ -736,7 +648,6 @@ data "aws_ami" "ubuntu" {
     name   = "virtualization-type"
     values = ["hvm"]
   }
-
   owners = ["099720109477"] # Canonical
 }
 
