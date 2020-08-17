@@ -16,6 +16,7 @@ module "vpc" {
   environment                = var.environment
   customer_prefix            = var.customer_prefix
   vpc_cidr                   = var.vpc_cidr
+  vpc_name                   = var.vpc_name
 
 }
 
