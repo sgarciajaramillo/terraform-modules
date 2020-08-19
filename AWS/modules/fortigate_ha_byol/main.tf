@@ -5,7 +5,7 @@ provider "aws" {
 }
 
 resource "aws_eip" "EIP" {
-  count                 = var.enable_public_ips
+  count                 = var.enable_public_ips ? 1 : 0
   vpc                   = true
   network_interface     = aws_network_interface.public_eni.id
   tags = {
@@ -15,7 +15,7 @@ resource "aws_eip" "EIP" {
 }
 
 resource "aws_eip" "HA_EIP" {
-  count                 = var.enable_mgmt_public_ips
+  count                 = var.enable_mgmt_public_ips ? 1 : 0
   vpc                   = true
   network_interface     = aws_network_interface.ha_eni.id
   tags = {

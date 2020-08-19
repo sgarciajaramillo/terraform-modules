@@ -48,3 +48,6 @@ variable "iam_instance_profile_id" {
 variable "description" {
   description = "EC2 Instance Description"
 }
+variable "enable_linux_instances" {
+  description = "Boolean to enable creation of Linux Endpoints"
+}

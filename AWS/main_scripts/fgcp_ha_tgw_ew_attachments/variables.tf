@@ -19,7 +19,9 @@ variable "availability_zone_1" {
 variable "availability_zone_2" {
   description = "Availability Zone 2 for VPC"
 }
-
+variable "fortigate_sg_name" {
+  description = "Fortigate Security Group Name"
+}
 variable "vpc_name_security" {
     description = "Name of Security VPC"
 }
@@ -171,17 +173,11 @@ variable "fortigate_instance_name_1" {
 variable "fortigate_instance_name_2" {
   description = "Instance Name for fortigate"
 }
-variable "public_ip" {
-  description = "Boolean to determine if endpoints should associate a public ip"
+variable "enable_fortigate_public_ip" {
+  description = "Boolean to determine if Fortigate should associate an elastic ip in the Public Subnet"
 }
-variable "disable_public_ip" {
-  description = "Boolean to disable association of a public ip"
-}
-variable "mgmt_public_ip" {
-  description = "Boolean to determine if endpoints should associate a public ip in the MGMT Subnet"
-}
-variable "disable_mgmt_public_ip" {
-  description = "Boolean to disable association of a public ip"
+variable "enable_fortigate_management_public_ip" {
+  description = "Boolean to determine if Fortigate should associate an elastic ip in the MGMT Subnet"
 }
 variable "s3_license_bucket" {
   description = "S3 Bucket that contains BYOL License Files"
@@ -216,9 +212,13 @@ variable "fortigate_hostname_2" {
 #
 # Ubuntu Endpoint resources
 #
-variable "sg_name" {
+variable "ec2_sg_name" {
   description = "Linux Endpoint Security Group Name"
 }
 variable "linux_instance_type" {
   description = "Linux Endpoint Instance Type"
+}
+variable "enable_linux_instances" {
+  description = "Boolean to allow creation of Linux Instances in East/West VPCs"
+  type        = bool
 }

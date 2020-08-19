@@ -18,10 +18,10 @@ resource "aws_security_group" "sg" {
     from_port   = var.egress_from_port
     to_port     = var.egress_to_port
     protocol    = var.egress_protocol
-    cidr_blocks = [ var.ingress_cidr_for_access]
+    cidr_blocks = [ var.egress_cidr_for_access]
   }
   tags = {
-	Name = "${var.customer_prefix}-${var.environment}-SG"
+	Name = "${var.customer_prefix}-${var.environment}-${var.name}-SG"
     Environment = var.environment
   }
 }

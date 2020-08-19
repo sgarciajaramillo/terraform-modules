@@ -29,49 +29,45 @@ data "aws_ami" "fortigate_byol" {
 #
 # This is an "allow all" security group, but a place holder for a more strict SG
 #
-resource aws_security_group "allow_private_subnets" {
-  name = "allow_private_subnets"
-  description = "Allow all traffic from Private Subnets"
-  vpc_id = module.base-vpc.vpc_id
-  ingress {
-    from_port = 0
-    to_port = 0
-    protocol = "-1"
-    cidr_blocks = ["0.0.0.0/0"]
-  }
-  egress {
-    from_port = 0
-    to_port = 0
-    protocol = "-1"
-    cidr_blocks = ["0.0.0.0/0"]
-  }
-  tags = {
-    Name = "allow_private_subnets"
-  }
+module "allow_private_subnets" {
+  source = "../../modules/security_group"
+  access_key              = var.access_key
+  secret_key              = var.secret_key
+  aws_region              = var.aws_region
+  vpc_id                  = module.base-vpc.vpc_id
+  name                    = "${var.fortigate_sg_name} Allow Private Subnets"
+  ingress_to_port         = 0
+  ingress_from_port       = 0
+  ingress_protocol        = "-1"
+  ingress_cidr_for_access = "0.0.0.0/0"
+  egress_to_port          = 0
+  egress_from_port        = 0
+  egress_protocol         = "-1"
+  egress_cidr_for_access  = "0.0.0.0/0"
+  customer_prefix         = var.customer_prefix
+  environment             = var.environment
 }
 
 #
 # This is an "allow all" security group, but a place holder for a more strict SG
 #
-resource aws_security_group "allow_public_subnets" {
-  name = "allow_public_subnets"
-  description = "Allow all traffic from public Subnets"
-  vpc_id = module.base-vpc.vpc_id
-  ingress {
-    from_port = 0
-    to_port = 0
-    protocol = "-1"
-    cidr_blocks = [ "0.0.0.0/0"]
-  }
-  egress {
-    from_port = 0
-    to_port = 0
-    protocol = "-1"
-    cidr_blocks = ["0.0.0.0/0"]
-  }
-  tags = {
-    Name = "allow_public_subnets"
-  }
+module "allow_public_subnets" {
+  source = "../../modules/security_group"
+  access_key              = var.access_key
+  secret_key              = var.secret_key
+  aws_region              = var.aws_region
+  vpc_id                  = module.base-vpc.vpc_id
+  name                    = "${var.fortigate_sg_name} Allow Public Subnets"
+  ingress_to_port         = 0
+  ingress_from_port       = 0
+  ingress_protocol        = "-1"
+  ingress_cidr_for_access = "0.0.0.0/0"
+  egress_to_port          = 0
+  egress_from_port        = 0
+  egress_protocol         = "-1"
+  egress_cidr_for_access  = "0.0.0.0/0"
+  customer_prefix         = var.customer_prefix
+  environment             = var.environment
 }
 
 #
@@ -567,10 +563,10 @@ module "fortigate_1" {
   keypair                     = var.keypair
   fgt_instance_type           = var.fortigate_instance_type
   fortigate_instance_name     = var.fortigate_instance_name_1
-  enable_public_ips           = var.public_ip
-  enable_mgmt_public_ips      = var.mgmt_public_ip
-  security_group_private_id   = aws_security_group.allow_private_subnets.id
-  security_group_public_id    = aws_security_group.allow_public_subnets.id
+  enable_public_ips           = var.enable_fortigate_public_ip
+  enable_mgmt_public_ips      = var.enable_fortigate_management_public_ip
+  security_group_private_id   = module.allow_private_subnets.id
+  security_group_public_id    = module.allow_public_subnets.id
   acl                         = var.acl
   fgt_byol_license            = var.fgt_byol_1_license
   spoke1_cidr                 = var.vpc_cidr_east
@@ -608,10 +604,10 @@ module "fortigate_2" {
   keypair                     = var.keypair
   fgt_instance_type           = var.fortigate_instance_type
   fortigate_instance_name     = var.fortigate_instance_name_2
-  enable_public_ips           = var.disable_public_ip
-  enable_mgmt_public_ips      = var.mgmt_public_ip
-  security_group_private_id   = aws_security_group.allow_private_subnets.id
-  security_group_public_id    = aws_security_group.allow_public_subnets.id
+  enable_public_ips           = var.enable_fortigate_public_ip
+  enable_mgmt_public_ips      = var.enable_fortigate_management_public_ip
+  security_group_private_id   = module.allow_private_subnets.id
+  security_group_public_id    = module.allow_public_subnets.id
   acl                         = var.acl
   fgt_byol_license            = var.fgt_byol_2_license
   spoke1_cidr                 = var.vpc_cidr_east
@@ -652,8 +648,32 @@ data "aws_ami" "ubuntu" {
 }
 
 #
+# Fortimanager Resources
+#
+
+#
 # EC2 Endpoint Resources
 #
+/*
+module "fortimanager" {
+  source = "../deploy_fortimanager_byol"
+  access_key                 = var.access_key
+  secret_key                 = var.secret_key
+  aws_region                 = var.aws_region
+  customer_prefix            = var.customer_prefix
+  environment                = var.environment
+  availability_zone          = var.availability_zone_1
+  vpc_id                     = module.base-vpc.vpc_id
+  enable_public_ip           = 0
+  fmgr_ami_string            = "FortiManager VM64-AWS build2072*(6.4.1)*"
+  fmgr_byol_license          = "fmgr-license.lic"
+  fortimanager_instance_name = "FGCP Fortmanager"
+  fortimanager_instance_type = "c5.xlarge"
+  ip_address                 = "10.0.5.100"
+  keypair                    = var.keypair
+  subnet_id                  = module.ha-subnet-1.id
+}
+*/
 
 #
 # Security Groups are VPC specific, so an "ALLOW ALL" for each VPC
@@ -664,7 +684,7 @@ module "ec2-east-sg" {
   secret_key           = var.secret_key
   aws_region           = var.aws_region
   vpc_id               = module.vpc-east.vpc_id
-  name                 = var.sg_name
+  name                 = var.ec2_sg_name
   ingress_to_port         = 0
   ingress_from_port       = 0
   ingress_protocol        = "-1"
@@ -684,7 +704,7 @@ module "ec2-west-sg" {
   secret_key           = var.secret_key
   aws_region           = var.aws_region
   vpc_id               = module.vpc-west.vpc_id
-  name                 = var.sg_name
+  name                 = var.ec2_sg_name
   ingress_to_port         = 0
   ingress_from_port       = 0
   ingress_protocol        = "-1"
@@ -732,6 +752,7 @@ module "aws_east_linux_instance" {
   security_group             = module.ec2-east-sg.id
   iam_instance_profile_id    = module.linux_iam_profile.id
   description                = "East Linux Instance"
+  enable_linux_instances     = var.enable_linux_instances
 }
 
 #
@@ -756,4 +777,5 @@ module "aws_west_linux_instance" {
   security_group             = module.ec2-west-sg.id
   iam_instance_profile_id    = module.linux_iam_profile.id
   description                = "West Linux Instance"
+  enable_linux_instances     = var.enable_linux_instances
 }

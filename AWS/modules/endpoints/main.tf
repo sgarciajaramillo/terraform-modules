@@ -9,6 +9,7 @@ data "template_file" "web_userdata" {
 }
 
 resource "aws_instance" "ec2" {
+  count                       = var.enable_linux_instances ? 1 : 0
   ami                         = var.ami_id
   instance_type               = var.instance_type
   user_data                   = data.template_file.web_userdata.rendered
