@@ -22,28 +22,7 @@ data "aws_ami" "fortimanager_byol" {
   owners                         = ["679593333241"] # Canonical
 }
 
-resource aws_security_group "allow_private_subnets" {
-  name = "allow_private_subnets"
-  description = "Allow all traffic from Private Subnets"
-  vpc_id = var.vpc_id
-  ingress {
-    from_port = 0
-    to_port = 0
-    protocol = "-1"
-    cidr_blocks = ["0.0.0.0/0"]
-  }
-  egress {
-    from_port = 0
-    to_port = 0
-    protocol = "-1"
-    cidr_blocks = ["0.0.0.0/0"]
-  }
-  tags = {
-    Name = "allow_private_subnets"
-  }
-}
-
-resource aws_security_group "allow_public_subnets" {
+resource aws_security_group "fortimanager_sg" {
   name = "allow_public_subnets"
   description = "Allow all traffic from public Subnets"
   vpc_id = var.vpc_id
@@ -79,10 +58,7 @@ module "fortimanager" {
   keypair                     = var.keypair
   fmgr_instance_type          = var.fortimanager_instance_type
   fortimanager_instance_name  = var.fortimanager_instance_name
-  enable_public_ips           = var.enable_public_ip
-  security_group_private_id   = aws_security_group.allow_private_subnets.id
-  security_group_public_id    = aws_security_group.allow_public_subnets.id
+  security_group_public_id    = aws_security_group.fortimanager_sg.id
   fmgr_byol_license           = var.fmgr_byol_license
-  enable_public_ip            = var.enable_public_ip
 }
 

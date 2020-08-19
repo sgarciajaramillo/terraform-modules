@@ -100,4 +100,3 @@ ec2_sg_name                 = "ec2"
 linux_instance_type         = "t2.micro"
 
 
-

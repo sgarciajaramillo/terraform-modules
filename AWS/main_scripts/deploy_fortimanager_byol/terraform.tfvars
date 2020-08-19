@@ -11,7 +11,6 @@ ip_address                   = ""
 keypair                      = ""
 fortimanager_instance_type   = ""
 fortimanager_instance_name   = ""
-enable_public_ip             = 0
 fmgr_ami_string              = "FortiManager VM64-AWS build2072*(6.4.1)*"
 fmgr_byol_license            = "fmgr-license.lic"
 

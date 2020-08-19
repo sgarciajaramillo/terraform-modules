@@ -26,27 +26,18 @@ variable "fmgr_instance_type" {
 variable "availability_zone" {
   description = "Availability Zone for this Fortimanager Instance"
 }
-
 variable "fortimanager_instance_name" {
   description = "Instance name of Fortimanager"
 }
-
 variable "subnet_id" {
   description = "Public Subnet ID"
 }
-
 variable "ip_address" {
   description = "Public ENI IP address"
 }
-
-variable "enable_public_ip" {
-  description = "Boolean to Enable an Elastic IP on Fortimanager"
-}
-
 variable "security_group_public_id" {
   description = "Security Group used by  ENI"
 }
-
 variable "fmgr_byol_license" {
   description = "Fortimanager BYOL License File"
 }

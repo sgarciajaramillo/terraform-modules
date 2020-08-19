@@ -222,3 +222,4 @@ variable "enable_linux_instances" {
   description = "Boolean to allow creation of Linux Instances in East/West VPCs"
   type        = bool
 }
+

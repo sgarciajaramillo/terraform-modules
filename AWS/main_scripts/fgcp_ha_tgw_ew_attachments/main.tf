@@ -648,32 +648,8 @@ data "aws_ami" "ubuntu" {
 }
 
 #
-# Fortimanager Resources
-#
-
-#
 # EC2 Endpoint Resources
 #
-/*
-module "fortimanager" {
-  source = "../deploy_fortimanager_byol"
-  access_key                 = var.access_key
-  secret_key                 = var.secret_key
-  aws_region                 = var.aws_region
-  customer_prefix            = var.customer_prefix
-  environment                = var.environment
-  availability_zone          = var.availability_zone_1
-  vpc_id                     = module.base-vpc.vpc_id
-  enable_public_ip           = 0
-  fmgr_ami_string            = "FortiManager VM64-AWS build2072*(6.4.1)*"
-  fmgr_byol_license          = "fmgr-license.lic"
-  fortimanager_instance_name = "FGCP Fortmanager"
-  fortimanager_instance_type = "c5.xlarge"
-  ip_address                 = "10.0.5.100"
-  keypair                    = var.keypair
-  subnet_id                  = module.ha-subnet-1.id
-}
-*/
 
 #
 # Security Groups are VPC specific, so an "ALLOW ALL" for each VPC

@@ -32,9 +32,6 @@ variable fortimanager_instance_type {
 variable fortimanager_instance_name {
   description = "Instance name of Fortimanager"
 }
-variable enable_public_ip {
-  description = "Boolean to enable EIP for Fortimanager"
-}
 variable "fmgr_ami_string" {
   description = "Fortigate AMI Search String for booting Fortigate Instance"
 }

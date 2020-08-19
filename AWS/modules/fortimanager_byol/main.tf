@@ -4,18 +4,8 @@ provider "aws" {
   secret_key = var.secret_key
 }
 
-resource "aws_eip" "EIP" {
-  count                 = var.enable_public_ip
-  vpc                   = true
-  network_interface     = aws_network_interface.public_eni.id
-  tags = {
-    Name            = "${var.customer_prefix}-${var.environment}-${var.fortimanager_instance_name}"
-    Environment     = var.environment
-  }
-}
-
 data "template_file" "fmgr_userdata" {
-  template = file("${path.module}/fmgr-userdata.tpl")
+  template = file("./fmgr-userdata.tpl")
 
   vars = {
     fgt_byol_license   = file("${path.module}/${var.fmgr_byol_license}")
