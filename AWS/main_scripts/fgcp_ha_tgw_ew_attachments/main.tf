@@ -604,7 +604,7 @@ module "fortigate_2" {
   keypair                     = var.keypair
   fgt_instance_type           = var.fortigate_instance_type
   fortigate_instance_name     = var.fortigate_instance_name_2
-  enable_public_ips           = var.enable_fortigate_public_ip
+  enable_public_ips           = false
   enable_mgmt_public_ips      = var.enable_fortigate_management_public_ip
   security_group_private_id   = module.allow_private_subnets.id
   security_group_public_id    = module.allow_public_subnets.id
