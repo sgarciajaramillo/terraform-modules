@@ -94,7 +94,7 @@ resource "aws_network_interface" "sync_eni" {
   source_dest_check           = false
 
   tags = {
-    Name = "${var.customer_prefix}-${var.environment}-${var.fortigate_instance_name}-ENI_Public"
+    Name = "${var.customer_prefix}-${var.environment}-${var.fortigate_instance_name}-ENI_Sync"
   }
 }
 
@@ -105,7 +105,7 @@ resource "aws_network_interface" "ha_eni" {
   source_dest_check           = false
 
   tags = {
-    Name = "${var.customer_prefix}-${var.environment}-${var.fortigate_instance_name}-ENI_Private"
+    Name = "${var.customer_prefix}-${var.environment}-${var.fortigate_instance_name}-ENI_hamgmt"
   }
 }
 
