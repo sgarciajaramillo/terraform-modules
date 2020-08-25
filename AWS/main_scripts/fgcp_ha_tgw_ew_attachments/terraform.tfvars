@@ -6,9 +6,7 @@ secret_key                  = ""
 # Allow creation of Linux instances in east/west VPCs
 #
 enable_linux_instances                = true
-enable_fortigate_public_ip            = true
-enable_fortigate_management_public_ip = true
-
+use_fortigate_byol                    = true
 #
 # Variables likely to change
 #
@@ -83,11 +81,10 @@ cidr_for_access             = "0.0.0.0/0"
 fortigate_instance_type     = "c5n.xlarge"
 fortigate_instance_name_1   = "Fortigate One HA Pair"
 fortigate_instance_name_2   = "Fortigate Two HA Pair"
-s3_license_bucket           = "mdw-license-bucket"
 acl                         = "private"
-fortigate_ami_string        = "FortiGate-VM64-AWS build1637 (6.4.1) GA*"
-fgt_byol_1_license          = "./fgt1-license.lic"
-fgt_byol_2_license          = "./fgt2-license.lic"
+fortios_version             = "6.4.1"
+fgt_byol_1_license          = "./licenses/fgt1-license.lic"
+fgt_byol_2_license          = "./licenses/fgt2-license.lic"
 fgt_ha_password             = "pocpassword727"
 fgt_admin_password          = "Texas4me!"
 fortigate_hostname_1        = "fgt-active"
@@ -97,6 +94,8 @@ fortigate_hostname_2        = "fgt-passive"
 # Endpoints Variables
 #
 ec2_sg_name                 = "ec2"
+linux_instance_name_east    = "East Linux Instance"
+linux_instance_name_west    = "West Linux Instance"
 linux_instance_type         = "t2.micro"
 
 

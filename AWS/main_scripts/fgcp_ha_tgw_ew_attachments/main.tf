@@ -6,16 +6,147 @@ provider "aws" {
   version    = "~> 3.0"
 }
 
+data "template_file" "fgt_userdata_byol1" {
+  template = file("./config_templates/fgt-userdata-byol.tpl")
+
+  vars = {
+    fgt_id                = var.fortigate_hostname_1
+    Port1IP               = var.public1_ip_address
+    Port2IP               = var.private1_ip_address
+    Port3IP               = var.sync_subnet_ip_address_1
+    Port4IP               = var.ha_subnet_ip_address_1
+    PrivateSubnet         = var.private_subnet_cidr_1
+    spoke1_cidr           = var.vpc_cidr_east
+    spoke2_cidr           = var.vpc_cidr_west
+    mgmt_cidr             = var.ha_subnet_cidr_1
+    mgmt_gw               = cidrhost(var.ha_subnet_cidr_1, 1)
+    fgt_priority          = "255"
+    fgt_ha_password       = var.fgt_ha_password
+    fgt_byol_license      = file("${path.module}/${var.fgt_byol_1_license}")
+    fgt-remote-heartbeat  = var.sync_subnet_ip_address_2
+    PublicSubnetRouterIP  = cidrhost(var.public_subnet_cidr1, 1)
+    public_subnet_mask    = cidrnetmask(var.public_subnet_cidr1)
+    private_subnet_mask   = cidrnetmask(var.private_subnet_cidr_1)
+    sync_subnet_mask      = cidrnetmask(var.sync_subnet_cidr_1)
+    hamgmt_subnet_mask    = cidrnetmask(var.ha_subnet_cidr_1)
+    PrivateSubnetRouterIP = cidrhost(var.private_subnet_cidr_1, 1)
+    fgt_admin_password    = var.fgt_admin_password
+  }
+}
+
+data "template_file" "fgt_userdata_byol2" {
+  template = file("./config_templates/fgt-userdata-byol.tpl")
+
+  vars = {
+    fgt_id                = var.fortigate_hostname_2
+    Port1IP               = var.public2_ip_address
+    Port2IP               = var.private2_ip_address
+    Port3IP               = var.sync_subnet_ip_address_2
+    Port4IP               = var.ha_subnet_ip_address_2
+    PrivateSubnet         = var.private_subnet_cidr_2
+    spoke1_cidr           = var.vpc_cidr_east
+    spoke2_cidr           = var.vpc_cidr_west
+    mgmt_cidr             = var.ha_subnet_cidr_2
+    mgmt_gw               = cidrhost(var.ha_subnet_cidr_2, 1)
+    fgt_priority          = "100"
+    fgt_ha_password       = var.fgt_ha_password
+    fgt_byol_license      = file("${path.module}/${var.fgt_byol_2_license}")
+    fgt-remote-heartbeat  = var.sync_subnet_ip_address_1
+    PublicSubnetRouterIP  = cidrhost(var.public_subnet_cidr2, 1)
+    public_subnet_mask    = cidrnetmask(var.public_subnet_cidr2)
+    private_subnet_mask   = cidrnetmask(var.private_subnet_cidr_2)
+    sync_subnet_mask      = cidrnetmask(var.sync_subnet_cidr_2)
+    hamgmt_subnet_mask    = cidrnetmask(var.ha_subnet_cidr_2)
+    PrivateSubnetRouterIP = cidrhost(var.private_subnet_cidr_2, 1)
+    fgt_admin_password    = var.fgt_admin_password
+  }
+}
+
+data "template_file" "fgt_userdata_paygo1" {
+  template = file("./config_templates/fgt-userdata-paygo.tpl")
+
+  vars = {
+    fgt_id                = var.fortigate_hostname_1
+    Port1IP               = var.public1_ip_address
+    Port2IP               = var.private1_ip_address
+    Port3IP               = var.sync_subnet_ip_address_1
+    Port4IP               = var.ha_subnet_ip_address_1
+    PrivateSubnet         = var.private_subnet_cidr_1
+    spoke1_cidr           = var.vpc_cidr_east
+    spoke2_cidr           = var.vpc_cidr_west
+    mgmt_cidr             = var.ha_subnet_cidr_1
+    mgmt_gw               = cidrhost(var.ha_subnet_cidr_1, 1)
+    fgt_priority          = "255"
+    fgt_ha_password       = var.fgt_ha_password
+    fgt-remote-heartbeat  = var.sync_subnet_ip_address_2
+    PublicSubnetRouterIP  = cidrhost(var.public_subnet_cidr1, 1)
+    public_subnet_mask    = cidrnetmask(var.public_subnet_cidr1)
+    private_subnet_mask   = cidrnetmask(var.private_subnet_cidr_1)
+    sync_subnet_mask      = cidrnetmask(var.sync_subnet_cidr_1)
+    hamgmt_subnet_mask    = cidrnetmask(var.ha_subnet_cidr_1)
+    PrivateSubnetRouterIP = cidrhost(var.private_subnet_cidr_1, 1)
+    fgt_admin_password    = var.fgt_admin_password
+  }
+}
+
+data "template_file" "fgt_userdata_paygo2" {
+  template = file("./config_templates/fgt-userdata-paygo.tpl")
+
+  vars = {
+    fgt_id                = var.fortigate_hostname_2
+    Port1IP               = var.public2_ip_address
+    Port2IP               = var.private2_ip_address
+    Port3IP               = var.sync_subnet_ip_address_2
+    Port4IP               = var.ha_subnet_ip_address_2
+    PrivateSubnet         = var.private_subnet_cidr_2
+    spoke1_cidr           = var.vpc_cidr_east
+    spoke2_cidr           = var.vpc_cidr_west
+    mgmt_cidr             = var.ha_subnet_cidr_2
+    mgmt_gw               = cidrhost(var.ha_subnet_cidr_2, 1)
+    fgt_priority          = "100"
+    fgt_ha_password       = var.fgt_ha_password
+    fgt-remote-heartbeat  = var.sync_subnet_ip_address_1
+    PublicSubnetRouterIP  = cidrhost(var.public_subnet_cidr2, 1)
+    public_subnet_mask    = cidrnetmask(var.public_subnet_cidr2)
+    private_subnet_mask   = cidrnetmask(var.private_subnet_cidr_2)
+    sync_subnet_mask      = cidrnetmask(var.sync_subnet_cidr_2)
+    hamgmt_subnet_mask    = cidrnetmask(var.ha_subnet_cidr_2)
+    PrivateSubnetRouterIP = cidrhost(var.private_subnet_cidr_2, 1)
+    fgt_admin_password    = var.fgt_admin_password
+  }
+}
+
 #
-# AMI to be used by the BYOL instance of Fortigate
-# Change the fortigate_ami_string in terraform.tfvars to change it
+# AMI to be used by the BYOL instance of Fortigate]
+# Change the foritos_version and the use_fortigate_byol variables in terraform.tfvars to change it
 #
 data "aws_ami" "fortigate_byol" {
   most_recent = true
 
   filter {
     name                         = "name"
-    values                       = [var.fortigate_ami_string]
+    values                       = ["FortiGate-VM64-AWS * (${var.fortios_version}) GA*"]
+  }
+
+  filter {
+    name                         = "virtualization-type"
+    values                       = ["hvm"]
+  }
+
+  owners                         = ["679593333241"] # Canonical
+}
+
+
+#
+# AMI to be used by the PAYGO instance of Fortigate
+# Change the foritos_version and the use_fortigate_byol variables in terraform.tfvars to change it
+#
+data "aws_ami" "fortigate_paygo" {
+  most_recent = true
+
+  filter {
+    name                         = "name"
+    values                       = ["FortiGate-VM64-AWSONDEMAND * (${var.fortios_version}) GA*"]
   }
 
   filter {
@@ -284,7 +415,7 @@ module "private1_tgw_route_table" {
   environment                = var.environment
   vpc_id                     = module.base-vpc.vpc_id
   eni_route                  = 1
-  eni_id                     = module.fortigate_1.network_private_interface_id
+  eni_id                     = element(module.fortigate_1.network_private_interface_id, 0)
   route_description          = "Private 1 TGW Route Table"
 }
 
@@ -323,7 +454,7 @@ module "private2_tgw_route_table" {
   environment                = var.environment
   vpc_id                     = module.base-vpc.vpc_id
   eni_route                  = 1
-  eni_id                     = module.fortigate_1.network_private_interface_id
+  eni_id                     = element(module.fortigate_1.network_private_interface_id, 0)
   route_description          = "Private 2 TGW Route Table"
 }
 
@@ -543,7 +674,7 @@ module "iam_profile" {
 }
 
 module "fortigate_1" {
-  source                      = "../../modules/fortigate_ha_byol"
+  source                      = "../../modules/ec2_instance"
 
   access_key                  = var.access_key
   secret_key                  = var.secret_key
@@ -551,6 +682,11 @@ module "fortigate_1" {
   availability_zone           = var.availability_zone_1
   customer_prefix             = var.customer_prefix
   environment                 = var.environment
+  enable_private_interface    = true
+  enable_sync_interface       = true
+  enable_hamgmt_interface     = true
+  enable_public_ips           = true
+  enable_mgmt_public_ips      = true
   public_subnet_id            = module.base-vpc.public1_subnet_id
   public_ip_address           = var.public1_ip_address
   private_subnet_id           = module.base-vpc.private1_subnet_id
@@ -559,32 +695,19 @@ module "fortigate_1" {
   sync_ip_address             = var.sync_subnet_ip_address_1
   ha_subnet_id                = module.ha-subnet-1.id
   ha_ip_address               = var.ha_subnet_ip_address_1
-  aws_fgtbyol_ami             = data.aws_ami.fortigate_byol.id
+  aws_ami                     = var.use_fortigate_byol ? data.aws_ami.fortigate_byol.id : data.aws_ami.fortigate_paygo.id
   keypair                     = var.keypair
-  fgt_instance_type           = var.fortigate_instance_type
-  fortigate_instance_name     = var.fortigate_instance_name_1
-  enable_public_ips           = var.enable_fortigate_public_ip
-  enable_mgmt_public_ips      = var.enable_fortigate_management_public_ip
+  instance_type               = var.fortigate_instance_type
+  instance_name               = var.fortigate_instance_name_1
   security_group_private_id   = module.allow_private_subnets.id
   security_group_public_id    = module.allow_public_subnets.id
   acl                         = var.acl
-  fgt_byol_license            = var.fgt_byol_1_license
-  spoke1_cidr                 = var.vpc_cidr_east
-  spoke2_cidr                 = var.vpc_cidr_west
-  fgt_priority                = "255"
-  fgt_ha_password             = var.fgt_ha_password
-  fgt_admin_password          = var.fgt_admin_password
-  sync2_ip_address            = var.sync_subnet_ip_address_2
-  fortigate_hostname          = var.fortigate_hostname_1
-  public_subnet_cidr          = var.public_subnet_cidr1
-  private_subnet_cidr         = var.private_subnet_cidr_1
-  sync_subnet_cidr            = var.sync_subnet_cidr_1
-  ha_subnet_cidr              = var.ha_subnet_cidr_1
   iam_instance_profile_id     = module.iam_profile.id
+  userdata_rendered           = var.use_fortigate_byol ? data.template_file.fgt_userdata_byol1.rendered : data.template_file.fgt_userdata_paygo1.rendered
 }
 
 module "fortigate_2" {
-  source                      = "../../modules/fortigate_ha_byol"
+  source                      = "../../modules/ec2_instance"
 
   access_key                  = var.access_key
   secret_key                  = var.secret_key
@@ -592,6 +715,11 @@ module "fortigate_2" {
   availability_zone           = var.availability_zone_2
   customer_prefix             = var.customer_prefix
   environment                 = var.environment
+  enable_private_interface    = true
+  enable_sync_interface       = true
+  enable_hamgmt_interface     = true
+  enable_public_ips           = false
+  enable_mgmt_public_ips      = true
   public_subnet_id            = module.base-vpc.public2_subnet_id
   public_ip_address           = var.public2_ip_address
   private_subnet_id           = module.base-vpc.private2_subnet_id
@@ -600,28 +728,15 @@ module "fortigate_2" {
   sync_ip_address             = var.sync_subnet_ip_address_2
   ha_subnet_id                = module.ha-subnet-2.id
   ha_ip_address               = var.ha_subnet_ip_address_2
-  aws_fgtbyol_ami             = data.aws_ami.fortigate_byol.id
+  aws_ami                     = var.use_fortigate_byol ? data.aws_ami.fortigate_byol.id : data.aws_ami.fortigate_paygo.id
   keypair                     = var.keypair
-  fgt_instance_type           = var.fortigate_instance_type
-  fortigate_instance_name     = var.fortigate_instance_name_2
-  enable_public_ips           = false
-  enable_mgmt_public_ips      = var.enable_fortigate_management_public_ip
+  instance_type               = var.fortigate_instance_type
+  instance_name               = var.fortigate_instance_name_2
   security_group_private_id   = module.allow_private_subnets.id
   security_group_public_id    = module.allow_public_subnets.id
   acl                         = var.acl
-  fgt_byol_license            = var.fgt_byol_2_license
-  spoke1_cidr                 = var.vpc_cidr_east
-  spoke2_cidr                 = var.vpc_cidr_west
-  fgt_priority                = "100"
-  fgt_ha_password             = var.fgt_ha_password
-  fgt_admin_password          = var.fgt_admin_password
-  sync2_ip_address            = var.sync_subnet_ip_address_1
-  fortigate_hostname          = var.fortigate_hostname_2
-  public_subnet_cidr          = var.public_subnet_cidr2
-  private_subnet_cidr         = var.private_subnet_cidr_2
-  sync_subnet_cidr            = var.sync_subnet_cidr_2
-  ha_subnet_cidr              = var.ha_subnet_cidr_2
   iam_instance_profile_id     = module.iam_profile.id
+  userdata_rendered           = var.use_fortigate_byol ? data.template_file.fgt_userdata_byol2.rendered : data.template_file.fgt_userdata_paygo2.rendered
 }
 
 #
@@ -632,6 +747,11 @@ module "fortigate_2" {
 # Endpoint AMI to use for Linux Instances. Just added this on the end, since traffic generating linux instances
 # would not make it to a production template.
 #
+
+data "template_file" "web_userdata" {
+  template = file("./config_templates/web-userdata.tpl")
+}
+
 data "aws_ami" "ubuntu" {
   most_recent = true
 
@@ -710,48 +830,48 @@ module "linux_iam_profile" {
 # East Linux Instance for Generating East->West Traffic
 #
 module "aws_east_linux_instance" {
-  source                     = "../../modules/endpoints"
-  access_key                 = var.access_key
-  secret_key                 = var.secret_key
-  aws_region                 = var.aws_region
-  customer_prefix            = var.customer_prefix
-  environment                = var.environment
-  ami_id                     = data.aws_ami.ubuntu.id
-  vpc_id                     = module.vpc-east.vpc_id
-  subnet_id                  = module.subnet-east.id
-  private_ip                 = "192.168.0.11"
-  cidr_for_access            = var.cidr_for_access
-  instance_type              = var.linux_instance_type
-  key_pair                   = var.keypair
-  instance_count             = 1
-  public_ip                  = false
-  security_group             = module.ec2-east-sg.id
-  iam_instance_profile_id    = module.linux_iam_profile.id
-  description                = "East Linux Instance"
-  enable_linux_instances     = var.enable_linux_instances
+  source                      = "../../modules/ec2_instance"
+
+  access_key                  = var.access_key
+  secret_key                  = var.secret_key
+  aws_region                  = var.aws_region
+  customer_prefix             = var.customer_prefix
+  environment                 = var.environment
+  enable_public_ips           = false
+  availability_zone           = var.availability_zone_1
+  public_subnet_id            = module.subnet-east.id
+  public_ip_address           = "192.168.0.11"
+  aws_ami                     = data.aws_ami.ubuntu.id
+  keypair                     = var.keypair
+  instance_type               = var.linux_instance_type
+  instance_name               = var.linux_instance_name_east
+  security_group_public_id    = module.ec2-east-sg.id
+  acl                         = var.acl
+  iam_instance_profile_id     = module.iam_profile.id
+  userdata_rendered           = data.template_file.web_userdata.rendered
 }
 
 #
 # West Linux Instance for Generating West->East Traffic
 #
 module "aws_west_linux_instance" {
-  source                     = "../../modules/endpoints"
-  access_key                 = var.access_key
-  secret_key                 = var.secret_key
-  aws_region                 = var.aws_region
-  customer_prefix            = var.customer_prefix
-  environment                = var.environment
-  ami_id                     = data.aws_ami.ubuntu.id
-  vpc_id                     = module.vpc-west.vpc_id
-  subnet_id                  = module.subnet-west.id
-  private_ip                 = "192.168.1.11"
-  cidr_for_access            = var.cidr_for_access
-  instance_type              = var.linux_instance_type
-  key_pair                   = var.keypair
-  instance_count             = 1
-  public_ip                  = false
-  security_group             = module.ec2-west-sg.id
-  iam_instance_profile_id    = module.linux_iam_profile.id
-  description                = "West Linux Instance"
-  enable_linux_instances     = var.enable_linux_instances
+  source                      = "../../modules/ec2_instance"
+
+  access_key                  = var.access_key
+  secret_key                  = var.secret_key
+  aws_region                  = var.aws_region
+  customer_prefix             = var.customer_prefix
+  environment                 = var.environment
+  enable_public_ips           = false
+  availability_zone           = var.availability_zone_1
+  public_subnet_id            = module.subnet-west.id
+  public_ip_address           = "192.168.1.11"
+  aws_ami                     = data.aws_ami.ubuntu.id
+  keypair                     = var.keypair
+  instance_type               = var.linux_instance_type
+  instance_name               = var.linux_instance_name_west
+  security_group_public_id    = module.ec2-west-sg.id
+  acl                         = var.acl
+  iam_instance_profile_id     = module.iam_profile.id
+  userdata_rendered           = data.template_file.web_userdata.rendered
 }

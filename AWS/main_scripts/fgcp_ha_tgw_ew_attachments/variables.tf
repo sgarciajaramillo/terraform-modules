@@ -173,20 +173,15 @@ variable "fortigate_instance_name_1" {
 variable "fortigate_instance_name_2" {
   description = "Instance Name for fortigate"
 }
-variable "enable_fortigate_public_ip" {
-  description = "Boolean to determine if Fortigate should associate an elastic ip in the Public Subnet"
-}
-variable "enable_fortigate_management_public_ip" {
-  description = "Boolean to determine if Fortigate should associate an elastic ip in the MGMT Subnet"
-}
-variable "s3_license_bucket" {
-  description = "S3 Bucket that contains BYOL License Files"
+variable "use_fortigate_byol" {
+  description = "Boolean Use the Fortigate BYOL AMI"
+  type = bool
 }
 variable "acl" {
   description = "The S3 acl"
 }
-variable "fortigate_ami_string" {
-  description = "Fortigate AMI Search String for booting Fortigate Instance"
+variable "fortios_version" {
+  description = "FortiOS Version for the AMI Search String"
 }
 variable "fgt_byol_1_license" {
   description = "Fortigate license file"
@@ -194,11 +189,9 @@ variable "fgt_byol_1_license" {
 variable "fgt_byol_2_license" {
   description = "Fortigate license file"
 }
-
 variable "fgt_ha_password" {
   description = "Fortigate HA Password"
 }
-
 variable "fgt_admin_password" {
   description = "Fortigate Admin Password"
 }
@@ -221,5 +214,11 @@ variable "linux_instance_type" {
 variable "enable_linux_instances" {
   description = "Boolean to allow creation of Linux Instances in East/West VPCs"
   type        = bool
+}
+variable "linux_instance_name_east" {
+  description = "Linux Endpoint Instance Name"
+}
+variable "linux_instance_name_west" {
+  description = "Linux Endpoint Instance Name"
 }
 
