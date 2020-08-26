@@ -84,6 +84,8 @@ resource "aws_instance" "ec2" {
   key_name                    = var.keypair
   user_data                   = var.userdata_rendered
   iam_instance_profile        = var.iam_instance_profile_id
+  private_ip                  = var.public_ip_address
+  security_groups             = [ var.security_group_public_id ]
   tags = {
     Name            = "${var.customer_prefix}-${var.environment}-${var.instance_name}"
     Environment     = var.environment
