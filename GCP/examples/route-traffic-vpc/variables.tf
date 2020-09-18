@@ -11,6 +11,3 @@ variable "vpcs" {}
 # subnet module
 variable "subnets" {}
 variable "subnet_cidrs" {}
-# firewall module
-variable "fw_ingress" {}
-variable "fw_egress" {}
