@@ -2,7 +2,7 @@
 
 This example creates a HA Active-Active configuration.
 
-![Image of HA Active/Active](/examples/ha-active-active/HA-Active-Active.png)
+![Image of HA Active/Active](/GCP/examples/ha-active-active/HA-Active-Active.png)
 
 ## Instances included in this Configuration
 
