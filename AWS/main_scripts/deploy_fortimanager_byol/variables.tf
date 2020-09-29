@@ -32,9 +32,21 @@ variable fortimanager_instance_type {
 variable fortimanager_instance_name {
   description = "Instance name of Fortimanager"
 }
-variable "fmgr_ami_string" {
-  description = "Fortigate AMI Search String for booting Fortigate Instance"
+variable fortimanager_sg_name {
+  description = "Fortimanager Security Group Name"
+}
+variable "fortimanager_os_version" {
+  description = "FortiManager OS Version got AMI Search String"
 }
 variable "fmgr_byol_license" {
   description = "Fortigate license file"
+}
+variable "acl" {
+  description = "Fortimanager ACL"
+}
+variable "enable_public_ips" {
+  description = "Boolean to associate a public EIP with the instance"
+}
+variable "use_fortimanager_byol" {
+  description = "Use BYOL version of FortiManager"
 }

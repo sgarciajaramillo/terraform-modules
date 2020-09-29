@@ -5,7 +5,7 @@ provider "aws" {
 }
 
 resource "aws_iam_role" "linux_role" {
-  name = "linux_role"
+  name = "${var.customer_prefix}-${var.environment}-instance_role"
 
   assume_role_policy = <<EOF
 {
@@ -23,17 +23,17 @@ resource "aws_iam_role" "linux_role" {
 }
 EOF
   tags = {
-    Name = "${var.customer_prefix}-${var.environment}-linux-iam-role"
+    Name = "${var.customer_prefix}-${var.environment}-instance-iam-role"
   }
 }
 
 resource "aws_iam_instance_profile" "linux_profile" {
-  name = "linux_profile"
+  name = "${var.customer_prefix}-${var.environment}-instance_profile"
   role = aws_iam_role.linux_role.name
 }
 
 resource "aws_iam_role_policy" "linux_policy" {
-  name = "linux_policy"
+  name = "${var.customer_prefix}-${var.environment}-instance_policy"
   role = aws_iam_role.linux_role.id
 
   policy = <<EOF

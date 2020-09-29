@@ -5,13 +5,27 @@ provider "aws" {
   secret_key = var.secret_key
 }
 
+data "template_file" "fmgr_userdata_byol" {
+  template = file("./config_templates/fmgr-userdata-byol.tpl")
+
+  vars = {
+    fmgr_byol_license      = file("${path.module}/${var.fmgr_byol_license}")
+  }
+}
+
+data "template_file" "fmgr_userdata_paygo" {
+  template = file("./config_templates/fmgr-userdata-paygo.tpl")
+
+  vars = {
+  }
+}
 
 data "aws_ami" "fortimanager_byol" {
   most_recent = true
 
   filter {
     name                         = "name"
-    values                       = [var.fmgr_ami_string]
+    values                       = ["FortiManager VM64-AWS *(${var.fortimanager_os_version})*"]
   }
 
   filter {
@@ -20,6 +34,38 @@ data "aws_ami" "fortimanager_byol" {
   }
 
   owners                         = ["679593333241"] # Canonical
+}
+
+module "iam_profile" {
+  source = "../../modules/ec2_instance_iam_role"
+
+  access_key                  = var.access_key
+  secret_key                  = var.secret_key
+  aws_region                  = var.aws_region
+  customer_prefix             = var.customer_prefix
+  environment                 = var.environment
+}
+
+#
+# This is an "allow all" security group, but a place holder for a more strict SG
+#
+module "allow_public_subnets" {
+  source = "../../modules/security_group"
+  access_key              = var.access_key
+  secret_key              = var.secret_key
+  aws_region              = var.aws_region
+  vpc_id                  = var.vpc_id
+  name                    = "${var.fortimanager_sg_name} Allow Public Subnets"
+  ingress_to_port         = 0
+  ingress_from_port       = 0
+  ingress_protocol        = "-1"
+  ingress_cidr_for_access = "0.0.0.0/0"
+  egress_to_port          = 0
+  egress_from_port        = 0
+  egress_protocol         = "-1"
+  egress_cidr_for_access  = "0.0.0.0/0"
+  customer_prefix         = var.customer_prefix
+  environment             = var.environment
 }
 
 resource aws_security_group "fortimanager_sg" {
@@ -44,7 +90,7 @@ resource aws_security_group "fortimanager_sg" {
 }
 
 module "fortimanager" {
-  source                      = "../../modules/fortimanager_byol"
+  source                      = "../../modules/ec2_instance"
 
   access_key                  = var.access_key
   secret_key                  = var.secret_key
@@ -52,13 +98,15 @@ module "fortimanager" {
   availability_zone           = var.availability_zone
   customer_prefix             = var.customer_prefix
   environment                 = var.environment
-  subnet_id                   = var.subnet_id
-  ip_address                  = var.ip_address
-  aws_fmgrbyol_ami            = data.aws_ami.fortimanager_byol.id
+  instance_name               = var.fortimanager_instance_name
+  instance_type               = var.fortimanager_instance_type
+  public_subnet_id            = var.subnet_id
+  public_ip_address           = var.ip_address
+  aws_ami                     = data.aws_ami.fortimanager_byol.id
+  enable_public_ips           = var.enable_public_ips
   keypair                     = var.keypair
-  fmgr_instance_type          = var.fortimanager_instance_type
-  fortimanager_instance_name  = var.fortimanager_instance_name
   security_group_public_id    = aws_security_group.fortimanager_sg.id
-  fmgr_byol_license           = var.fmgr_byol_license
+  iam_instance_profile_id     = module.iam_profile.id
+  userdata_rendered           = var.use_fortimanager_byol ? data.template_file.fmgr_userdata_byol.rendered : data.template_file.fmgr_userdata_paygo.rendered
 }
 

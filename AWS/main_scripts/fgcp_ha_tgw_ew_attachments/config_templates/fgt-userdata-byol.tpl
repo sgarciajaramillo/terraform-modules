@@ -70,6 +70,14 @@ set dst ${spoke2_cidr}
 set gateway ${PrivateSubnetRouterIP}
 next
 end
+config system vdom-exception
+edit 1
+set object system.interface
+next
+edit 2
+set object router.static
+next
+end
 config firewall address
 edit toSpoke1
 set subnet ${spoke1_cidr}
@@ -92,6 +100,20 @@ set portforward enable
 set mappedip "192.168.0.11"
 set extport 2222
 set mappedport 22
+next
+edit "vip_to_east_http"
+set extintf "port1"
+set portforward enable
+set mappedip "192.168.0.11"
+set extport 8080
+set mappedport 80
+next
+edit "vip_to_west_http"
+set extintf "port1"
+set portforward enable
+set mappedip "192.168.1.11"
+set extport 8081
+set mappedport 80
 next
 edit "vip_to_west"
 set extintf "port1"
@@ -143,6 +165,28 @@ set srcintf "port1"
 set dstintf "port2"
 set srcaddr "all"
 set dstaddr "vip_to_west"
+set action accept
+set schedule "always"
+set service "ALL"
+set logtraffic all
+next
+edit 5
+set name "vip_to_east_80"
+set srcintf "port1"
+set dstintf "port2"
+set srcaddr "all"
+set dstaddr "vip_to_east_http"
+set action accept
+set schedule "always"
+set service "ALL"
+set logtraffic all
+next
+edit 6
+set name "vip_to_west_80"
+set srcintf "port1"
+set dstintf "port2"
+set srcaddr "all"
+set dstaddr "vip_to_west_http"
 set action accept
 set schedule "always"
 set service "ALL"

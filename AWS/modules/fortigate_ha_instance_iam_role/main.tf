@@ -5,7 +5,7 @@ provider "aws" {
 }
 
 resource "aws_iam_role" "fortigate_role" {
-  name = "fortigate_role"
+  name = "fortigate_role-${var.customer_prefix}-${var.environment}"
 
   assume_role_policy = <<EOF
 {
@@ -28,12 +28,12 @@ EOF
 }
 
 resource "aws_iam_instance_profile" "fortigate_profile" {
-  name = "fortigate_profile"
+  name = "fortigate_profile-${var.customer_prefix}-${var.environment}"
   role = aws_iam_role.fortigate_role.name
 }
 
 resource "aws_iam_role_policy" "fortigate_policy" {
-  name = "fortigate_policy"
+  name = "fortigate_policy-${var.customer_prefix}-${var.environment}"
   role = aws_iam_role.fortigate_role.id
 
   policy = <<EOF
