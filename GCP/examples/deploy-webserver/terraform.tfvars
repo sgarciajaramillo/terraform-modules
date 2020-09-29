@@ -9,6 +9,3 @@ vpcs                    = ["public-vpc"]
 # subnet module
 subnets                 = ["public-subnet"]
 subnet_cidrs            = ["172.19.2.0/24"]
-# Firewall module
-fw_ingress              = ["public-fw-ingress"]
-fw_egress               = ["public-fw-egress"]

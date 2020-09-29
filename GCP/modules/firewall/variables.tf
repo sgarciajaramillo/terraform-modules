@@ -8,28 +8,9 @@ variable "random_string" {
   description = "Random String"
 }
 
-variable "public_vpc_network" {
-  type        = string
-  default     = "public_vpc_network"
-  description = "Public VPC Network"
-}
-
-variable "private_vpc_network" {
-  type        = string
-  default     = "private_vpc_network"
-  description = "Private VPC Network"
-}
-
-variable "sync_vpc_network" {
-  type        = string
-  default     = "sync_vpc_network"
-  description = "Sync VPC Network"
-}
-
-variable "mgmt_vpc_network" {
-  type        = string
-  default     = "mgmt_vpc_network"
-  description = "Management VPC Network"
+variable "vpcs" {
+  type        = list(string)
+  description = "VPC Networks"
 }
 
 variable "source_ranges" {

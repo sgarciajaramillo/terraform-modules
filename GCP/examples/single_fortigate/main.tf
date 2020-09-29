@@ -31,11 +31,8 @@ module "subnet" {
 }
 
 module "firewall" {
-  source = "../../modules/firewall_single"
+  source = "../../modules/firewall"
 
-  # Pass Variables
-  fw_ingress = var.fw_ingress
-  fw_egress  = var.fw_egress
   # Values fetched from the Modules
   random_string = module.random.random_string
   vpcs          = module.vpc.vpc_networks

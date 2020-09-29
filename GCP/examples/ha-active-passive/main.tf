@@ -34,11 +34,8 @@ module "firewall" {
   source = "../../modules/firewall"
 
   # Values fetched from the Modules
-  random_string       = module.random.random_string
-  public_vpc_network  = module.vpc.vpc_networks[0]
-  private_vpc_network = module.vpc.vpc_networks[1]
-  sync_vpc_network    = module.vpc.vpc_networks[2]
-  mgmt_vpc_network    = module.vpc.vpc_networks[3]
+  random_string = module.random.random_string
+  vpcs          = module.vpc.vpc_networks
 }
 
 module "route" {
