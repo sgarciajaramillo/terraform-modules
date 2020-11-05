@@ -3,8 +3,8 @@ output "External-IP" {
   value = module.static_ip.static_ip
 }
 
-output "FortiGate-Cluster-IP" {
-  value = module.instances.fgt_ha_cluster_ip
+output "FortiGate-IP" {
+  value = module.instances.fgt_ip
 }
 
 output "Active-FortiGate-Username" {

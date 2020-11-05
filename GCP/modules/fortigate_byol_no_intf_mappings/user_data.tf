@@ -7,6 +7,6 @@ data "template_file" "setup-byol-instance" {
     clusterip      = "cluster-ip-${var.random_string}"
     internalroute  = "internal-route-${var.random_string}"
     externalip     = var.static_ip
-    internalip     = var.internal_ip
+    internalip     = var.nginx_internal_ip
   }
 }

@@ -1,6 +1,6 @@
 # Compute Engine Instance - Active
 resource "google_compute_instance" "fgt_byol_instance" {
-  name           = "terraform-fgt-byol-instance-${var.random_string}"
+  name           = "${var.name}-fgt-byol-instance-${var.random_string}"
   machine_type   = var.machine
   zone           = var.zone
   can_ip_forward = "true"
@@ -30,6 +30,12 @@ resource "google_compute_instance" "fgt_byol_instance" {
     serial-port-logging-enable = "TRUE"
     user-data                  = "${data.template_file.setup-byol-instance.rendered}"
     license                    = file(var.license_file) # Placeholder for the license file for BYOL image, Need to fetch the License File
+  }
+
+  # Service Account
+  service_account {
+    email  = var.service_account
+    scopes = ["cloud-platform"]
   }
 
   // When Changing the machine_type, min_cpu_platform, service_account, or enable display on an instance requires stopping it

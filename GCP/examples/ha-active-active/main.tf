@@ -1,5 +1,5 @@
 provider "google" {
-  version     = "3.5.0"
+  version     = "3.20.0"
   credentials = file(var.credentials_file_path)
   project     = var.project
   region      = var.region
@@ -20,6 +20,7 @@ module "random" {
 module "vpc" {
   source = "../../modules/vpc"
   # Pass Variables
+  name = var.name
   vpcs = var.vpcs
   # Values fetched from the Modules
   random_string = module.random.random_string
@@ -29,6 +30,7 @@ module "subnet" {
   source = "../../modules/subnet"
 
   # Pass Variables
+  name         = var.name
   region       = var.region
   subnets      = var.subnets
   subnet_cidrs = var.subnet_cidrs
@@ -51,6 +53,7 @@ module "cloud_router" {
   source = "../../modules/cloud_router"
 
   # Pass Variables
+  name   = var.name
   region = var.region
   # Values fetched from the Modules
   random_string = module.random.random_string
@@ -61,6 +64,7 @@ module "cloud_nat" {
   source = "../../modules/cloud_nat"
 
   # Pass Variables
+  name   = var.name
   region = var.region
   # Values fetched from the Modules
   random_string = module.random.random_string
@@ -156,8 +160,9 @@ resource "google_compute_region_instance_group_manager" "mig" {
 
 ### External Load Balancer ###
 resource "google_compute_forwarding_rule" "external_load_balancer" {
-  name   = "terraform-external-loadbalancer-rule-${module.random.random_string}"
-  region = var.region
+  name       = "terraform-external-loadbalancer-rule-${module.random.random_string}"
+  region     = var.region
+  port_range = "1-65535"
 
   load_balancing_scheme = "EXTERNAL"
   target                = google_compute_target_pool.default.self_link
@@ -215,6 +220,8 @@ resource "google_compute_health_check" "int_lb_health_check" {
 module "static-ip" {
   source = "../../modules/static-ip"
 
+  # Pass Variables
+  name = var.name
   # Values fetched from the Modules
   random_string = module.random.random_string
 }
@@ -223,6 +230,7 @@ module "bastionhost_windows" {
   source = "../../modules/bastionhost_windows"
 
   # Pass Variables
+  name            = var.name
   image           = var.bastionhost_image
   machine         = var.bastionhost_machine
   service_account = var.service_account

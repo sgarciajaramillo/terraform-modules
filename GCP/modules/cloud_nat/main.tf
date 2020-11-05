@@ -2,7 +2,7 @@
 # https://www.terraform.io/docs/providers/google/r/compute_router_nat.html
 
 resource "google_compute_router_nat" "cloud_nat" {
-  name                               = "terraform-cloud-nat-${var.random_string}"
+  name                               = "${var.name}-cloud-nat-${var.random_string}"
   router                             = var.cloud_router
   region                             = var.region
   nat_ip_allocate_option             = "AUTO_ONLY"

@@ -34,7 +34,7 @@ This example creates a HA Active-Passive configuration.
 ## How do you run these examples?
 
 1. Install [Terraform](https://www.terraform.io/).
-1. Open `variables.tf`,  and fill in any required variables that don't have a default.
+1. Open `variables.tf`,  and fill in required variables that don't have a default. (CREDENTIALS, GCP_PROJECT, SERVICE_ACCOUNT_EMAIL, IMAGE, LICENSE_FILE)
 1. Run `terraform get`.
 1. Run `terraform init`.
 1. Run `terraform plan`.

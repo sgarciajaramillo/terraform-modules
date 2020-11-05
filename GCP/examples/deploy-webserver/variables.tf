@@ -1,5 +1,6 @@
 variable "credentials_file_path" {}
 variable "project" {}
+variable "name" {}
 variable "region" {}
 variable "zone" {}
 variable "machine" {}

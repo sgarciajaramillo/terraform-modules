@@ -1,6 +1,6 @@
 # Compute Engine Instance - nginx
 resource "google_compute_instance" "nginx_instance" {
-  name           = "terraform-nginx-instance-${var.random_string}"
+  name           = "${var.name}-nginx-instance-${var.random_string}"
   machine_type   = var.machine
   zone           = var.zone
   can_ip_forward = "true"

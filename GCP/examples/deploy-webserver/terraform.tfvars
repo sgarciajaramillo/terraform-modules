@@ -1,5 +1,6 @@
 credentials_file_path   = "<CREDENTIALS>"
 project                 = "<GCP_PROJECT>"
+name                    = "terraform"
 region                  = "us-central1"
 zone                    = "us-central1-c"
 machine                 = "n1-standard-4"

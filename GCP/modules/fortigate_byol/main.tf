@@ -1,6 +1,6 @@
 # Compute Engine Instance
 resource "google_compute_instance" "fgt_byol_instance" {
-  name           = "terraform-fgt-byol-instance"
+  name           = "${var.name}-fgt-byol-instance"
   machine_type   = var.machine
   zone           = var.zone
   can_ip_forward = "true"
@@ -31,6 +31,12 @@ resource "google_compute_instance" "fgt_byol_instance" {
   metadata = {
     user-data = "${data.template_file.setup-byol-instance.rendered}"
     license   = file(var.license_file) # Placeholder for the license file for BYOL image, Need to fetch the License File
+  }
+
+  # Service Account and Scope
+  service_account {
+    email  = var.service_account
+    scopes = ["cloud-platform"]
   }
 
   // When Changing the machine_type, min_cpu_platform, service_account, or enable display on an instance requires stopping it

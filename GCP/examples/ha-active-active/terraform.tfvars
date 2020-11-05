@@ -1,10 +1,14 @@
 credentials_file_path       = "<credentials_file_path>"
-service_account             = "<service_account>"
+service_account             = "<service_account_email>"
 project                     = "<project>"
+name                        = "terraform"
 region                      = "us-central1"
 zone                        = "us-central1-c"
 machine                     = "n1-standard-2"
-image                       = "projects/fortigcp-project-001/global/images/fortinet-fgtondemand-623-20191223-001-w-license"    #Default 6.2.3 PAYG
+# FortiGate Image name
+# 6.4.2 payg is projects/fortigcp-project-001/global/images/fortinet-fgtondemand-642-20200810-001-w-license
+# 6.4.2 byol is projects/fortigcp-project-001/global/images/fortinet-fgt-642-20200810-001-w-license
+image                       = "projects/fortigcp-project-001/global/images/fortinet-fgtondemand-642-20200810-001-w-license"
 bastionhost_image           = "windows-cloud/windows-2019"
 bastionhost_machine         = "n1-standard-2"
 admin_port                  = 8443

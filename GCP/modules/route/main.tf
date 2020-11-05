@@ -1,5 +1,5 @@
 resource "google_compute_route" "private_vpc_route" {
-  name        = "terraform-internal-route-${var.random_string}"
+  name        = "${var.name}-internal-route-${var.random_string}"
   dest_range  = var.dest_range
   network     = var.private_vpc_network
   next_hop_ip = var.next_hop_ip

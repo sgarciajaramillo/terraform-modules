@@ -2,6 +2,11 @@
 # REQUIRED PARAMETERS
 # These parameters must be supplied when consuming this module.
 # ---------------------------------------------------------------------------------------------------------------------
+variable "service_account" {
+  type        = string
+  description = "Service Account"
+}
+
 variable "zone" {
   type        = string
   description = "Zone"
@@ -35,8 +40,8 @@ variable "public_subnet_gateway" {
 }
 
 # Internal IP
-variable "internal_ip" {
-  default     = "internal_ip"
+variable "nginx_internal_ip" {
+  default     = "nginx_internal_ip"
   description = "Nginx Internal IP Address"
 }
 
@@ -50,6 +55,12 @@ variable "static_ip" {
 # OPTIONAL PARAMETERS
 # Generally, these values won't need to be changed.
 # ---------------------------------------------------------------------------------------------------------------------
+variable "name" {
+  type        = string
+  default     = "terraform"
+  description = "Name"
+}
+
 variable "random_string" {
   type        = string
   default     = "abc"

@@ -1,6 +1,6 @@
 # Compute Engine Instance - Active
 resource "google_compute_instance" "active_instance" {
-  name           = "terraform-ha-active-instance-${var.random_string}"
+  name           = "${var.name}-ha-active-instance-${var.random_string}"
   machine_type   = var.machine
   zone           = var.zone
   can_ip_forward = "true"
@@ -49,6 +49,7 @@ resource "google_compute_instance" "active_instance" {
 
   # Service Account scope for the GCP SDN Connector
   service_account {
+    email  = var.service_account
     scopes = ["cloud-platform"]
   }
 
@@ -58,7 +59,7 @@ resource "google_compute_instance" "active_instance" {
 
 # Compute Engine Instance - Passive
 resource "google_compute_instance" "passive_instance" {
-  name           = "terraform-ha-passive-instance-${var.random_string}"
+  name           = "${var.name}-ha-passive-instance-${var.random_string}"
   machine_type   = var.machine
   zone           = var.zone
   can_ip_forward = "true"
@@ -104,6 +105,7 @@ resource "google_compute_instance" "passive_instance" {
 
   # Service Account scope for the GCP SDN Connector
   service_account {
+    email  = var.service_account
     scopes = ["cloud-platform"]
   }
 
