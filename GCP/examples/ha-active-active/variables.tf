@@ -32,7 +32,7 @@ variable "autohealing_check_interval_sec" {}
 variable "autohealing_timeout_sec" {}
 variable "autohealing_healthy_threshold" {}
 variable "autohealing_unhealthy_threshold" {}
-variable "autohealing_https_health_check" {}
+variable "autohealing_tcp_health_check" {}
 variable "initial_delay_sec" {}
 # External Load Balancer
 variable "elb_check_interval_sec" {}

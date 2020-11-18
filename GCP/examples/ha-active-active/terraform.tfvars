@@ -27,7 +27,7 @@ autohealing_check_interval_sec  = 5
 autohealing_timeout_sec         = 5
 autohealing_healthy_threshold   = 2
 autohealing_unhealthy_threshold = 10 # 50 seconds
-autohealing_https_health_check  = 8443
+autohealing_tcp_health_check    = 541
 initial_delay_sec               = 500
 # External Load Balancer
 elb_check_interval_sec          = 3

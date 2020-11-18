@@ -131,8 +131,8 @@ resource "google_compute_health_check" "autohealing" {
   healthy_threshold   = var.autohealing_healthy_threshold
   unhealthy_threshold = var.autohealing_unhealthy_threshold
 
-  https_health_check {
-    port = var.autohealing_https_health_check
+  tcp_health_check {
+    port = var.autohealing_tcp_health_check
   }
 }
 
